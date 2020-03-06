@@ -6,6 +6,16 @@ const state = {
 
 const mutations = {
   SET_STOCKS(state, stocks) {
+    state.stocks.sort(function(a, b) {
+      let nameA = a.name.toUpperCase();
+      let nameB = b.name.toUpperCase();
+      if (nameA > nameB) {
+        return 1;
+      }
+      if (nameA < nameB) {
+        return 0;
+      }
+    });
     state.stocks = stocks;
   },
   RND_STOCKS(state) {

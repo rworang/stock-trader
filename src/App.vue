@@ -33,12 +33,16 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title class="mr-4">Stock Trader</v-toolbar-title>
       <v-btn elevation="0" class="text-capitalize" tile to="/">Stocks</v-btn>
-      <v-btn elevation="0" class="text-capitalize" tile to="/portfolio">Portfolio</v-btn>
+      <v-btn elevation="0" class="text-capitalize" tile to="/portfolio"
+        >Portfolio</v-btn
+      >
       <v-spacer></v-spacer>
       <v-btn elevation="0" class="text-capitalize" tile>End Day</v-btn>
       <v-btn elevation="0" class="text-capitalize" tile>Save &amp; Load</v-btn>
       <v-btn elevation="0" class="text-capitalize" tile>
-<!--        <span class="currency">{{ $store.state.funds.toLocaleString() }}</span>-->
+        <span class="currency">{{
+          $store.getters.funds.toLocaleString()
+        }}</span>
       </v-btn>
     </v-app-bar>
 
@@ -59,7 +63,7 @@ export default {
   name: "App",
   components: {},
   created() {
-    this.$store.dispatch('initStocks');
+    this.$store.dispatch("initStocks");
   },
   data: () => ({
     drawer: false,
@@ -69,7 +73,7 @@ export default {
 </script>
 
 <style lang="scss">
-  .currency:before {
-    content: "\0024"
-  }
+.currency:before {
+  content: "\0024";
+}
 </style>

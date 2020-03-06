@@ -1,14 +1,16 @@
 <template>
   <v-card outlined @click="cardClick">
     <v-row>
-      <v-col :cols="8" class="py-0">
+      <v-col :cols="7" class="py-0">
         <v-card-title class="display-1">
           {{ stock.abbr }}
         </v-card-title>
         <v-card-subtitle>{{ stock.name }}</v-card-subtitle>
       </v-col>
-      <v-col :cols="4" class="text-right pr-7">
-        <span class="headline currency">{{ stock.price }}</span>
+      <v-col :cols="5" class="text-right pr-7">
+        <span class="headline currency">{{
+          stock.price.toLocaleString()
+        }}</span>
       </v-col>
     </v-row>
     <v-card-text class="py-0">
@@ -76,6 +78,7 @@ export default {
         quantity: this.quantity
       };
       this.$store.dispatch("buyStock", order);
+      console.log(order);
       this.quantity = null;
     }
   }
@@ -88,33 +91,33 @@ export default {
   cursor: default;
 }
 
-.slide-enter {
-  /*transform: translateY(20px);*/
-}
-.slide-enter-active {
-  animation: slide-in 0.5s ease-out forwards;
-}
-.slide-leave {
-}
-.slide-leave-active {
-  animation: slide-out 0.5s ease-out forwards;
-}
+// .slide-enter {
+//   transform: translateY(20px);
+// }
+// .slide-enter-active {
+//   animation: slide-in 0.5s ease-out forwards;
+// }
+// .slide-leave {
+// }
+// .slide-leave-active {
+//   animation: slide-out 0.5s ease-out forwards;
+// }
 
-@keyframes slide-in {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(20px);
-  }
-}
+// @keyframes slide-in {
+//   from {
+//     transform: translateY(0);
+//   }
+//   to {
+//     transform: translateY(20px);
+//   }
+// }
 
-@keyframes slide-out {
-  from {
-    transform: translateY(20px);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
+// @keyframes slide-out {
+//   from {
+//     transform: translateY(20px);
+//   }
+//   to {
+//     transform: translateY(0);
+//   }
+// }
 </style>
