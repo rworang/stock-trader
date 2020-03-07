@@ -98,6 +98,7 @@ export default {
   components: {},
   created() {
     this.$store.dispatch("initStocks");
+    this.$store.dispatch("getPrices");
   },
   data: () => ({
     drawer: false,
