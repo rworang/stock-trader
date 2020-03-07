@@ -1,3 +1,6 @@
+const yFinance = require("yfinance");
+console.log(yFinance);
+
 export default [
   {
     id: 1,

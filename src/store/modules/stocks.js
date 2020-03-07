@@ -1,7 +1,8 @@
 import stocks from "@/data/stocks";
 
 const state = {
-  stocks: []
+  stocks: [],
+  loading: true
 };
 
 const mutations = {
@@ -17,6 +18,7 @@ const mutations = {
       }
     });
     state.stocks = stocks;
+    state.loading = false;
   },
   RND_STOCKS(state) {
     state.stocks.forEach(stock => {
@@ -40,6 +42,9 @@ const actions = {
 const getters = {
   stocks: state => {
     return state.stocks;
+  },
+  loading: state => {
+    return state.loading;
   }
 };
 

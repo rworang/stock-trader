@@ -1,13 +1,14 @@
 <template>
   <div>
     <v-row>
+      <v-col cols="12"> </v-col>
       <v-col :cols="6">
         <h1>Stocks</h1>
       </v-col>
       <v-col :cols="6" class="text-right pt-5">
         <v-menu offset-y dense>
           <template v-slot:activator="{ on }">
-            <v-btn v-on="on" elevation="0">
+            <v-btn v-on="on" elevation="0" class="pr-3">
               Sort by
             </v-btn>
           </template>
@@ -19,7 +20,7 @@
             </v-list-item>
           </v-list>
         </v-menu>
-        <v-btn elevation="0" @click="sortBy(sortOrder)">
+        <v-btn elevation="0" @click="sortBy(sortOrder)" class="px-0">
           <v-icon v-if="sortOrder">mdi-sort-descending</v-icon>
           <v-icon v-else>mdi-sort-ascending</v-icon>
         </v-btn>
@@ -35,19 +36,30 @@
         v-for="stock in stocks"
         :key="stock.abbr"
       >
-        <app-stock :stock="stock"></app-stock>
+        <template v-if="$store.state.loading">
+          <v-skeleton-loader
+            class="mx-auto"
+            max-width="300"
+            type="card"
+          ></v-skeleton-loader>
+        </template>
+        <app-stock :stock="stock" page="stocks"></app-stock>
+        <br />
+        <app-stock-card :stock="stock" page="stocks"></app-stock-card>
       </v-col>
     </v-row>
   </div>
 </template>
 
 <script>
-import StocksStock from "@/components/Stock";
+const Stock = () => import("@/components/Stock");
+const StockCard = () => import("@/components/stock/StockCard");
 
 export default {
   name: "Stocks",
   components: {
-    "app-stock": StocksStock
+    "app-stock": Stock,
+    "app-stock-card": StockCard
   },
   computed: {
     stocks() {
@@ -60,15 +72,6 @@ export default {
       sortedBy: "name",
       sortItems: ["price", "name"]
     };
-  },
-  watch: {
-    // sortedBy: function(s) {
-    //   console.log(s);
-    // },
-    // sortOrder: function() {
-    //   // console.log(b);
-    //   this.sortBy(this.sortedBy);
-    // }
   },
   methods: {
     sortBy(b, v = this.sortedBy) {
