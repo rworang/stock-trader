@@ -3,7 +3,7 @@
     <v-row>
       <v-col :cols="5" class="py-0">
         <v-card-title class="display-1">
-          {{ stock.abbr }}
+          {{ stock.symbol }}
         </v-card-title>
         <v-card-subtitle>{{ stock.name }}</v-card-subtitle>
       </v-col>
@@ -147,6 +147,9 @@ export default {
   }),
 
   watch: {
+    stock() {
+      console.log(this.stock);
+    },
     quantity() {
       if (!Number.isInteger(this.quantity)) {
         this.quantity = parseInt(this.quantity);

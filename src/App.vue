@@ -97,8 +97,9 @@ export default {
   name: "App",
   components: {},
   created() {
-    this.$store.dispatch("initStocks");
-    this.$store.dispatch("getPrices");
+    // this.$store.dispatch("initStocks");
+    // this.$store.dispatch("getStocks");
+    this.$store.dispatch("getAllStocks");
   },
   data: () => ({
     drawer: false,
@@ -118,6 +119,10 @@ export default {
 <style lang="scss">
 .currency:before {
   content: "\0024";
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 .slide-fast-enter {

@@ -26,6 +26,20 @@
         </v-btn>
       </v-col>
     </v-row>
+    <!--    <v-row>-->
+    <!--      <v-col-->
+    <!--              cols="12"-->
+    <!--              sm="6"-->
+    <!--              md="6"-->
+    <!--              lg="4"-->
+    <!--              xl="3"-->
+    <!--              v-for="stock in stocks"-->
+    <!--              :key="stock.abbr"-->
+    <!--      >-->
+    <!--        <app-stock :stock="stock" page="stocks"></app-stock>-->
+    <!--        <br />-->
+    <!--      </v-col>-->
+    <!--    </v-row>-->
     <v-row>
       <v-col
         cols="12"
@@ -33,54 +47,30 @@
         md="6"
         lg="4"
         xl="3"
-        v-for="stock in stocks"
-        :key="stock.abbr"
+        v-for="stock in allStocksList"
+        :key="stock.stock_id"
       >
-        <template v-if="$store.state.loading">
-          <v-skeleton-loader
-            class="mx-auto"
-            max-width="300"
-            type="card"
-          ></v-skeleton-loader>
-        </template>
-        <app-stock :stock="stock" page="stocks"></app-stock>
-        <br />
+        <app-stock-card :stock="stock" page="stocks"></app-stock-card>
       </v-col>
     </v-row>
   </div>
 </template>
 
 <script>
-const Stock = () => import("@/components/Stock");
+import profiles from "@/data/profile";
+
+// const Stock = () => import("@/components/Stock");
+const StockCard = () => import("@/components/stock/StockIndex");
 
 export default {
   name: "Stocks",
   components: {
-    "app-stock": Stock
+    // "app-stock": Stock,
+    "app-stock-card": StockCard
   },
   computed: {
-    stocks() {
-      return this.$store.getters.stocks;
-    },
-    symbols() {
-      return this.$store.getters.symbols;
-    },
-    prices() {
-      return this.$store.getters.prices;
-    },
-    apiStocks() {
-      return this.$store.getters.apiStocks;
-    }
-  },
-  watch: {
-    symbols() {
-      console.log(this.symbols);
-    },
-    prices() {
-      console.log(this.prices);
-    },
-    apiStocks() {
-      console.log(this.apiStocks);
+    allStocksList() {
+      return this.$store.getters.allStocksList;
     }
   },
   data: () => {
@@ -91,6 +81,13 @@ export default {
     };
   },
   methods: {
+    getProfile(symbol) {
+      let symbols = symbol.split("/");
+      let profile = [];
+      profile.push(profiles.find(element => element.short_name === symbols[0]));
+      profile.push(profiles.find(element => element.short_name === symbols[1]));
+      return profile;
+    },
     sortBy(b, v = this.sortedBy) {
       this.sortOrder = !b;
       const vm = this;

@@ -41,7 +41,7 @@ export default [
     code_n: "937",
     subunit: "",
     website: "",
-    symbol: "Bs.F. or Bs.",
+    symbol: "Bs.",
     bank: "Central Bank of Venezuela",
     banknotes: "Bs.S. 2, 5, 10, 20, 50, 100, 200, 500, 10,000, 20,000, 50,000",
     coins: "50 c\u00e9ntimos, Bs.S. 1",
