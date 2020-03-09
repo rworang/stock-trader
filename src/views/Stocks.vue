@@ -8,18 +8,34 @@
       <v-col :cols="6" class="text-right pt-5">
         <v-menu offset-y dense>
           <template v-slot:activator="{ on }">
-            <v-btn v-on="on" elevation="0" class="pr-3">
-              Sort by
+            <v-btn v-on="on" elevation="0">
+              Results: {{ sortAmountMenu }}
             </v-btn>
           </template>
           <v-list dense>
-            <v-list-item v-for="(item, index) in sortItems" :key="index" link>
-              <v-list-item-title @click="sortBy(sortOrder, item)">{{
+            <v-list-item v-for="(item, index) in sortAmount" :key="index" link>
+              <v-list-item-title @click="sortAmountMenu = item">{{
                 item
               }}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
+
+        <v-menu offset-y dense>
+          <template v-slot:activator="{ on }">
+            <v-btn v-on="on" elevation="0">
+              Sort by: {{ sortItemsMenu }}
+            </v-btn>
+          </template>
+          <v-list dense>
+            <v-list-item v-for="(item, index) in sortItems" :key="index" link>
+              <v-list-item-title @click="sortItemsMenu = item">{{
+                item
+              }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
         <v-btn elevation="0" @click="sortBy(sortOrder)" class="px-0">
           <v-icon v-if="sortOrder">mdi-sort-descending</v-icon>
           <v-icon v-else>mdi-sort-ascending</v-icon>
@@ -47,7 +63,7 @@
         md="6"
         lg="4"
         xl="3"
-        v-for="stock in allStocksList"
+        v-for="stock in stocks"
         :key="stock.stock_id"
       >
         <app-stock-card :stock="stock" page="stocks"></app-stock-card>
@@ -57,8 +73,6 @@
 </template>
 
 <script>
-import profiles from "@/data/profile";
-
 // const Stock = () => import("@/components/Stock");
 const StockCard = () => import("@/components/stock/StockIndex");
 
@@ -69,25 +83,21 @@ export default {
     "app-stock-card": StockCard
   },
   computed: {
-    allStocksList() {
-      return this.$store.getters.allStocksList;
+    stocks() {
+      return this.$store.getters.stocks;
     }
   },
   data: () => {
     return {
       sortOrder: true,
       sortedBy: "name",
-      sortItems: ["price", "name"]
+      sortItemsMenu: "name",
+      sortItems: ["name", "price"],
+      sortAmountMenu: "30",
+      sortAmount: ["30", "60", "90", "120"]
     };
   },
   methods: {
-    getProfile(symbol) {
-      let symbols = symbol.split("/");
-      let profile = [];
-      profile.push(profiles.find(element => element.short_name === symbols[0]));
-      profile.push(profiles.find(element => element.short_name === symbols[1]));
-      return profile;
-    },
     sortBy(b, v = this.sortedBy) {
       this.sortOrder = !b;
       const vm = this;

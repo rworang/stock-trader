@@ -99,7 +99,8 @@ export default {
   created() {
     // this.$store.dispatch("initStocks");
     // this.$store.dispatch("getStocks");
-    this.$store.dispatch("getAllStocks");
+    this.$store.dispatch("initStocks");
+
   },
   data: () => ({
     drawer: false,
@@ -119,6 +120,7 @@ export default {
 <style lang="scss">
 .currency:before {
   content: "\0024";
+  color: grey;
 }
 
 .pointer {

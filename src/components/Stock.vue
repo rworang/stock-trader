@@ -3,7 +3,7 @@
     <v-row>
       <v-col :cols="5" class="py-0">
         <v-card-title class="display-1">
-          {{ stock.symbol }}
+          {{ stock.short_name }}
         </v-card-title>
         <v-card-subtitle>{{ stock.name }}</v-card-subtitle>
       </v-col>

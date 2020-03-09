@@ -1,21 +1,42 @@
 <template>
-  <v-card outlined>
+  <v-card outlined :loading="$store.state.loading" class="pa-1">
     <v-container fluid>
       <v-row>
-        <v-col class="display-1 font-weight-bold py-0">
-          <span>{{ stock.symbol }}</span>
+        <v-col
+          cols="7"
+          class="font-weight-bold py-0 pr-0"
+          style="font-size:3.8rem;line-height:3.5rem;"
+        >
+          <div>
+            <span title="Stock short name / symbol">{{
+              stock.short_name
+            }}</span>
+          </div>
+          <div class="headline grey--text text--lighten-1">
+            <span title="Stock full name">
+              <span v-if="stock.short_name !== 'MCD'">{{ stock.name }}</span>
+              <span v-else>McDonald's</span>
+            </span>
+          </div>
         </v-col>
-        <v-col class="text-right py-0" style="font-size: 1.8rem;">
-          <span class="grey--text">{{ splitSymbol("to") }}</span>
-          <span>{{ stock.price.toLocaleString() }}</span>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col class="py-0" cols="9">
-          <span>{{ stockName }}</span>
-        </v-col>
-        <v-col class="text-right py-0" cols="3">
-          <span :class="changeColor"> {{ stock.chg_per }}</span>
+        <v-col cols="5" class="text-right py-0 pl-0">
+          <div class="currency display-1" title="Price in Dollars">
+            {{ stock.price.toLocaleString() }}
+          </div>
+          <div>
+            <span class="subtitle-2" title="Price low">
+              <v-icon x-small color="red">mdi-arrow-down</v-icon>
+              {{ stock.low.toLocaleString() }}
+            </span>
+            <span class="subtitle-2" title="Price high">
+              <v-icon x-small color="green">mdi-arrow-up</v-icon>
+              {{ stock.high.toLocaleString() }}
+            </span>
+          </div>
+          <div>
+            <span class="body-1" title="Change in percentages">change: </span
+            ><span :class="changeColor">{{ stock.chg_percent }}</span>
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -48,9 +69,9 @@ export default {
       return this.profile[0].name + " to " + this.profile[1].name;
     },
     changeColor() {
-      if (this.stock.chg_per[0] === "-") {
+      if (this.stock.chg_percent[0] === "-") {
         return "red--text";
-      } else if (this.stock.chg_per[0] === "+") {
+      } else if (this.stock.chg_percent[0] === "+") {
         return "green--text";
       } else {
         return "white--text";

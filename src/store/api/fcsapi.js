@@ -1,93 +1,118 @@
 import axios from "axios";
 import countries from "@/data/countries";
-import stocksList from "@/data/stocksList";
 
 const base_url = "https://fcsapi.com/api-v2/stock";
-const api_key = "&access_key=lCkUeANtGkhqy801AwWz0RiBNy6W9OROG0LrJAFECXaAez";
+const api_key =
+  "&access_key=" + "lCkUeANtGkhqy801AwWz0RiBNy6W9OROG0LrJAFECXaAez";
 
 const state = {
   loading: 0,
-  currentPage: 1,
-  pageAmount: 20,
+  indicesId: 1,
+  pageList: [],
+  pagePrices: [],
   countries: countries,
-  stocksList: stocksList,
   stocks: []
 };
 
 const mutations = {
   START_LOAD(state, payload) {
-    console.log("Start load: " + payload);
+    let m = payload;
+    m;
+    // console.log("<-##-- Start load: " + payload + " --##->");
     state.loading += 1;
   },
   STOP_LOAD(state, payload) {
-    console.log("Stop load: " + payload);
+    let m = payload;
+    m;
+    // console.log("<-##-- Stop load: " + payload + " --##->");
     state.loading -= 1;
   },
-  SET_ALL_STOCKS(state, payload) {
-    state.stocks.allStocksList = payload;
-    console.log("SET_ALL_STOCKS", state.stocks);
+  SET_PAGE_STOCKS(state, payload) {
+    // console.log("SET_PAGE_STOCKS: Setting initial page stocks \n", payload);
+    state.pageList = payload;
+  },
+  SET_PAGE_PRICES(state, payload) {
+    // console.log(
+    //   "SET_PAGE_PRICES: Setting initial page stock prices \n",
+    //   payload
+    // );
+    state.pagePrices = payload;
+  },
+  MERGE_STOCKS(state) {
+    // console.log(
+    //   "MERGE_STOCKS: Merging pageList & pagePrices into stocks object."
+    // );
+    let merged = [];
+    for (let i = 0; i < state.pageList.length; i++) {
+      merged.push({
+        ...state.pageList[i],
+        ...state.pagePrices.find(
+          itmInner => itmInner.id === state.pageList[i].stock_id
+        )
+      });
+    }
+    console.log(merged);
+    state.stocks = merged;
   }
 };
 
 const actions = {
-  async getAllStocks({ commit, getters }) {
+  async initStocks({ commit, dispatch }) {
     commit("START_LOAD", "getAllStocks");
-    return axios
-      .get(base_url + "/list?country=" + getters.countryQuery + api_key)
-      .then(r => {
-        console.log("API message :", r.data.msg);
-        commit("SET_ALL_STOCKS", r.data.response);
-        commit("STOP_LOAD", "SUCCESS: getAllStocks");
+
+    let stocks = await dispatch("loadPageStocks");
+    let prices = await dispatch("loadPagePrices");
+
+    return Promise.all([stocks, prices])
+      .then(() => {
+        commit("MERGE_STOCKS");
+        commit("STOP_LOAD", "SUCCESS: initStocks");
       })
-      .catch(error => {
-        console.log("prices error: /n", error);
-        commit("STOP_LOAD", "ERROR: getAllStocks");
+      .catch(err => {
+        console.log("prices error: /n", err);
+        commit("STOP_LOAD", "ERROR: initStocks");
+      });
+  },
+  loadPageStocks({ commit }) {
+    commit("START_LOAD", "loadPageStocks");
+    return axios
+      .get(base_url + "/list?indices_id=" + state.indicesId + api_key)
+      .then(r => {
+        console.warn("API message :", r.data.msg);
+        commit("SET_PAGE_STOCKS", r.data.response);
+        commit("STOP_LOAD", "SUCCESS: loadPageStocks");
+      })
+      .catch(err => {
+        console.log("prices error: /n", err);
+        commit("STOP_LOAD", "ERROR: loadPageStocks");
+      });
+  },
+  loadPagePrices({ commit, getters }) {
+    commit("START_LOAD", "loadPagePrices");
+    return axios
+      .get(base_url + "/latest?id=" + getters.pageIdQuery + api_key)
+      .then(r => {
+        console.warn("API message :", r.data.msg);
+        commit("SET_PAGE_PRICES", r.data.response);
+        commit("STOP_LOAD", "SUCCESS: loadPagePrices");
+      })
+      .catch(err => {
+        console.log("prices error: /n", err);
+        commit("STOP_LOAD", "ERROR: loadPagePrices");
       });
   }
 };
 
 const getters = {
-  symbolQuery: state => {
-    let a = state.pageAmount;
-    let query = "";
-    for (let n in state.symbols.slice(a - a, a)) {
-      query += state.symbols[n].short_name;
-      if (parseInt(n) !== a - 1) {
-        query += ",";
-      }
-      console.log(n);
-    }
-    console.log(query);
-    return query;
-  },
-  countryQuery: state => {
-    let q = "";
-    for (let n in state.countries) {
-      q += state.countries[n] + ",";
-    }
-    console.log("countryQuery: ", q);
-    return q;
-  },
   stocks: state => {
     return state.stocks;
   },
-  allStocksList: state => {
-    return state.allStocksList;
-  },
-  pageCount: state => {
-    return state.pageCount;
-  },
-  symbols: state => {
-    return state.symbols.slice(
-      state.pageAmount - state.pageAmount,
-      state.pageAmount
-    );
-  },
-  prices: state => {
-    return state.prices;
-  },
-  profile: state => {
-    return state.profile;
+  pageIdQuery: state => {
+    let q = "";
+    for (let i in state.pageList) {
+      q += parseInt(i) + 1 + ",";
+    }
+    return q;
   }
 };
 
