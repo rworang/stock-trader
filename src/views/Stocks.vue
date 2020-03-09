@@ -27,25 +27,6 @@
       </v-col>
     </v-row>
     <v-row>
-      <!--      <v-col-->
-      <!--        cols="12"-->
-      <!--        sm="6"-->
-      <!--        md="6"-->
-      <!--        lg="4"-->
-      <!--        xl="3"-->
-      <!--        v-for="stock in stocks"-->
-      <!--        :key="stock.abbr"-->
-      <!--      >-->
-      <!--        <template v-if="$store.state.loading">-->
-      <!--          <v-skeleton-loader-->
-      <!--            class="mx-auto"-->
-      <!--            max-width="300"-->
-      <!--            type="card"-->
-      <!--          ></v-skeleton-loader>-->
-      <!--        </template>-->
-      <!--        <app-stock :stock="stock" page="stocks"></app-stock>-->
-      <!--        <br />-->
-      <!--      </v-col>-->
       <v-col
         cols="12"
         sm="6"
@@ -62,11 +43,7 @@
             type="card"
           ></v-skeleton-loader>
         </template>
-        <app-stock-card
-          :symbols="symbols"
-          :prices="prices"
-          page="stocks"
-        ></app-stock-card>
+        <app-stock :stock="stock" page="stocks"></app-stock>
         <br />
       </v-col>
     </v-row>
@@ -74,14 +51,12 @@
 </template>
 
 <script>
-// const Stock = () => import("@/components/Stock");
-const StockCard = () => import("@/components/stock/StockCard");
+const Stock = () => import("@/components/Stock");
 
 export default {
   name: "Stocks",
   components: {
-    // "app-stock": Stock,
-    "app-stock-card": StockCard
+    "app-stock": Stock
   },
   computed: {
     stocks() {
