@@ -109,6 +109,24 @@
       </v-row>
 
       <v-row>
+        <v-divider light></v-divider>
+      </v-row>
+
+      <v-row v-if="page === 'portfolio'" class="">
+        <v-col cols="12" class="py-2">
+          <!--          {{ ownedStock(stock.id) }} x-->
+          <!--          <span class="currency">{{ stock.price.toLocaleString() }}</span>-->
+          <!--          =-->
+          <div class="pb-1">
+            Total value of <strong>{{ ownedStock(stock.id) }}</strong> owned stocks
+          </div>
+          <span class="currency display-2">{{
+            (ownedStock(stock.id) * stock.price).toLocaleString()
+          }}</span>
+        </v-col>
+      </v-row>
+
+      <v-row>
         <v-col cols="12" class="pa-0 text-center border-light-y">
           <v-btn
             small
@@ -133,17 +151,6 @@
       <v-expand-transition>
         <v-row v-show="stockInfo">
           <v-container fluid>
-            <v-row v-if="page === 'portfolio'" class="border-light-b pb-3 mb-2">
-              <v-col cols="12" class="py-0">
-                {{ ownedStock(stock.id) }} x
-                <span class="currency">{{ stock.price.toLocaleString() }}</span>
-                =
-                <span class="currency display-2">{{
-                  (ownedStock(stock.id) * stock.price).toLocaleString()
-                }}</span>
-              </v-col>
-            </v-row>
-
             <v-row>
               <v-col cols="4" class="py-0 text-right grey--text font-italic">
                 <div v-if="stock.full_name">Full name:</div>

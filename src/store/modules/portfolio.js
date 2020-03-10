@@ -11,7 +11,8 @@ const mutations = {
     } else {
       state.stocks.push({
         id: stockId,
-        quantity: quantity
+        quantity: quantity,
+        bought_at: stockPrice
       });
     }
     state.funds -= stockPrice * quantity;
@@ -47,6 +48,7 @@ const getters = {
       return {
         id: stock.id,
         quantity: stock.quantity,
+        bought_at: stock.bought_at,
 
         short_name: record.short_name,
         name: record.name,
