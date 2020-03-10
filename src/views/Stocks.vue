@@ -5,30 +5,30 @@
         <h1>Stocks</h1>
       </v-col>
       <v-col :cols="6" class="text-right pt-5">
-        <v-menu offset-y dense>
+        <v-menu transition="fade-transition" offset-y dense>
           <template v-slot:activator="{ on }">
             <v-btn v-on="on" elevation="0">
               Results: {{ sortAmountMenu }}
             </v-btn>
           </template>
           <v-list dense>
-            <v-list-item v-for="(item, index) in sortAmount" :key="index" link>
-              <v-list-item-title @click="sortAmountMenu = item">{{
+            <v-list-item v-for="(item, index) in sortAmount" :key="index" link @click="sortAmountMenu = item">
+              <v-list-item-title>{{
                 item
               }}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
 
-        <v-menu offset-y dense>
+        <v-menu transition="fade-transition" offset-y dense>
           <template v-slot:activator="{ on }">
             <v-btn v-on="on" elevation="0">
               Sort by: {{ sortItemsMenu }}
             </v-btn>
           </template>
           <v-list dense>
-            <v-list-item v-for="(item, index) in sortItems" :key="index" link>
-              <v-list-item-title @click="sortItemsFn(item)">{{
+            <v-list-item v-for="(item, index) in sortItems" :key="index" link @click="sortItemsFn(item)">
+              <v-list-item-title>{{
                 item
               }}</v-list-item-title>
             </v-list-item>
@@ -81,9 +81,12 @@ export default {
       return this.$store.getters.stocks;
     }
   },
+  created() {
+    this.sortBy(this.sortOrder);
+  },
   data: () => {
     return {
-      sortOrder: true,
+      sortOrder: false,
       sortItemsMenu: "name",
       sortItems: ["name", "price"],
       sortAmountMenu: "30",
@@ -98,6 +101,12 @@ export default {
       this.$store.dispatch("prevStocksPage");
     },
     sortItemsFn(item) {
+      if(item === "name") {
+        this.sortOrder = false;
+      }
+      if(item === "price") {
+        this.sortOrder = true;
+      }
       this.sortItemsMenu = item;
       this.sortBy(this.sortOrder);
     },

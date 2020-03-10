@@ -1,5 +1,5 @@
 const state = {
-  funds: 10000,
+  funds: 250000,
   stocks: []
 };
 
@@ -47,12 +47,20 @@ const getters = {
       return {
         id: stock.id,
         quantity: stock.quantity,
+
         short_name: record.short_name,
         name: record.name,
         price: record.price,
         low: record.low,
         high: record.high,
-        chg_percent: record.chg_percent
+        chg_percent: record.chg_percent,
+        country: record.country,
+        dateTime: record.dateTime,
+        full_name: record.full_name,
+        sector: record.sector,
+        industry: record.industry,
+        no_of_employee: record.no_of_employee,
+        info: record.info
       };
     });
   },
