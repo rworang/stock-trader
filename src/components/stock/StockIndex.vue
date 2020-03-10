@@ -41,7 +41,9 @@
               {{ stock.high.toLocaleString() }}
             </span>
           </div>
-          <div v-else>Owned amount: {{ ownedStock(stock.id) }}</div>
+          <div v-else @click="quantity = ownedStock(stock.id)">
+            Owned amount: {{ ownedStock(stock.id) }}
+          </div>
           <div>
             <span class="body-2" title="Change in percentages"
               >change:
@@ -118,8 +120,11 @@
           <!--          <span class="currency">{{ stock.price.toLocaleString() }}</span>-->
           <!--          =-->
           <div class="pb-1">
-            Total value of <strong>{{ ownedStock(stock.id) }}</strong> owned
-            stocks
+            Total value of
+            <strong @click="quantity = ownedStock(stock.id)">{{
+              ownedStock(stock.id)
+            }}</strong>
+            owned stocks
           </div>
           <span class="currency display-2">{{
             (ownedStock(stock.id) * stock.price).toLocaleString()
@@ -304,6 +309,7 @@ export default {
           this.quantity = 0;
         }
       }
+      console.log(this.quantity);
     }
   },
 
@@ -318,7 +324,6 @@ export default {
       if (page === "portfolio") {
         this.$refs.sellStock.focus();
       }
-      this.quantity = 0;
     },
     ownedStock(id) {
       let q = 0;
@@ -343,7 +348,6 @@ export default {
       }
     },
     buyLimit(price) {
-      console.log(Math.round(this.funds / price) * price);
       return Math.floor(this.funds / price);
     },
     buyStock() {
