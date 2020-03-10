@@ -32,6 +32,9 @@ const mutations = {
 };
 
 const actions = {
+  buyStock: ({ commit }, order) => {
+    commit("BUY_STOCK", order);
+  },
   sellStock({ commit }, order) {
     commit("SELL_STOCK", order);
   }
@@ -44,9 +47,12 @@ const getters = {
       return {
         id: stock.id,
         quantity: stock.quantity,
-        abbr: record.abbr,
+        short_name: record.short_name,
         name: record.name,
-        price: record.price
+        price: record.price,
+        low: record.low,
+        high: record.high,
+        chg_percent: record.chg_percent
       };
     });
   },

@@ -128,7 +128,7 @@ export default {
 
   computed: {
     stocks() {
-      return this.$store.getters.stockPortfolio;
+      return this.$store.getters.stock;
     },
     funds() {
       return this.$store.getters.funds;
@@ -210,7 +210,7 @@ export default {
           quantity: this.quantity
         };
         this.$store.dispatch("buyStock", order);
-        // console.log(order);
+        console.log(order);
         this.quantity = null;
       }
     },
@@ -222,7 +222,7 @@ export default {
           quantity: this.quantity
         };
         this.$store.dispatch("sellStock", order);
-        // console.log(order);
+        console.log(order);
         this.quantity = null;
       }
     }

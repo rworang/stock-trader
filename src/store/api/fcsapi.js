@@ -1,57 +1,66 @@
 import axios from "axios";
 import countries from "@/data/countries";
+import stocks from "@/data/stocks";
 
 const base_url = "https://fcsapi.com/api-v2/stock";
-const api_key =
-  "&access_key=" + "lCkUeANtGkhqy801AwWz0RiBNy6W9OROG0LrJAFECXaAez";
+// const api_key = "&access_key=" + "lCkUeANtGkhqy801AwWz0RiBNy6W9OROG0LrJAFECXaAez";
+const api_key = "&access_key=" + "XvmL2QYjfPLCLLMqldUxWA6RsBFxCmxLR7I5W6sAtapQKbltGg";
 
 const state = {
-  loading: 0,
   indicesId: 1,
+  pageAmount: 30,
   pageList: [],
   pagePrices: [],
+  pageProfiles: [],
   countries: countries,
-  stocks: []
+  stocks: stocks
 };
 
 const mutations = {
-  START_LOAD(state, payload) {
-    let m = payload;
-    m;
-    // console.log("<-##-- Start load: " + payload + " --##->");
-    state.loading += 1;
+  START_LOAD(state) {
+    state.loading = true;
   },
-  STOP_LOAD(state, payload) {
-    let m = payload;
-    m;
-    // console.log("<-##-- Stop load: " + payload + " --##->");
-    state.loading -= 1;
+  STOP_LOAD(state) {
+    state.loading = false;
+  },
+  SET_API_MSG(state, payload) {
+    state.apiMsg = payload;
   },
   SET_PAGE_STOCKS(state, payload) {
-    // console.log("SET_PAGE_STOCKS: Setting initial page stocks \n", payload);
     state.pageList = payload;
+    console.log(state.pageList);
   },
   SET_PAGE_PRICES(state, payload) {
-    // console.log(
-    //   "SET_PAGE_PRICES: Setting initial page stock prices \n",
-    //   payload
-    // );
     state.pagePrices = payload;
+    console.log(state.pagePrices);
+  },
+  SET_PAGE_PROFILES(state, payload) {
+    state.pageProfiles = payload;
+    console.log(state.pageProfiles);
+  },
+  LOAD_NEXT_PAGE(state) {
+    console.log("Loading next page");
+    state.indicesId++;
+  },
+  LOAD_PREV_PAGE(state) {
+    console.log("Loading prev page");
+
+    state.indicesId--;
   },
   MERGE_STOCKS(state) {
-    // console.log(
-    //   "MERGE_STOCKS: Merging pageList & pagePrices into stocks object."
-    // );
     let merged = [];
     for (let i = 0; i < state.pageList.length; i++) {
       merged.push({
         ...state.pageList[i],
         ...state.pagePrices.find(
           itmInner => itmInner.id === state.pageList[i].stock_id
+        ),
+        ...state.pageProfiles.find(
+          itmInner => itmInner.id === state.pageList[i].stock_id
         )
       });
     }
-    console.log(merged);
+    console.log("Merged responses:", merged);
     state.stocks = merged;
   }
 };
@@ -62,8 +71,9 @@ const actions = {
 
     let stocks = await dispatch("loadPageStocks");
     let prices = await dispatch("loadPagePrices");
+    let profiles = await dispatch("loadPageProfiles");
 
-    return Promise.all([stocks, prices])
+    return Promise.all([stocks, prices, profiles])
       .then(() => {
         commit("MERGE_STOCKS");
         commit("STOP_LOAD", "SUCCESS: initStocks");
@@ -78,6 +88,7 @@ const actions = {
     return axios
       .get(base_url + "/list?indices_id=" + state.indicesId + api_key)
       .then(r => {
+        console.log(r);
         console.warn("API message :", r.data.msg);
         commit("SET_PAGE_STOCKS", r.data.response);
         commit("STOP_LOAD", "SUCCESS: loadPageStocks");
@@ -92,6 +103,7 @@ const actions = {
     return axios
       .get(base_url + "/latest?id=" + getters.pageIdQuery + api_key)
       .then(r => {
+        console.log(r);
         console.warn("API message :", r.data.msg);
         commit("SET_PAGE_PRICES", r.data.response);
         commit("STOP_LOAD", "SUCCESS: loadPagePrices");
@@ -100,6 +112,37 @@ const actions = {
         console.log("prices error: /n", err);
         commit("STOP_LOAD", "ERROR: loadPagePrices");
       });
+  },
+  loadPageProfiles({ commit, getters }) {
+    commit("START_LOAD", "loadPageProfiles");
+    return axios
+      .get(base_url + "/profile?id=" + getters.pageIdQuery + api_key)
+      .then(r => {
+        console.log(r);
+        console.warn("API message :", r.data.msg);
+        commit("SET_PAGE_PROFILES", r.data.response);
+        commit("STOP_LOAD", "SUCCESS: loadPageProfiles");
+      })
+      .catch(err => {
+        console.log("prices error: /n", err);
+        commit("STOP_LOAD", "ERROR: loadPageProfiles");
+      });
+  },
+  async nextStocksPage({ commit, dispatch }) {
+    commit("START_LOAD", "nextStocksPage");
+    if (state.indicesId >= 1) {
+      commit("LOAD_NEXT_PAGE");
+      await dispatch("initStocks");
+      commit("STOP_LOAD", "nextStocksPage");
+    }
+  },
+  async prevStocksPage({ commit, dispatch }) {
+    commit("START_LOAD", "prevStocksPage");
+    if (state.indicesId <= 1) {
+      commit("LOAD_PREV_PAGE");
+      await dispatch("initStocks");
+      commit("STOP_LOAD", "prevStocksPage");
+    }
   }
 };
 
@@ -107,11 +150,15 @@ const getters = {
   stocks: state => {
     return state.stocks;
   },
+  loading: state => {
+    return state.loading;
+  },
   pageIdQuery: state => {
     let q = "";
     for (let i in state.pageList) {
-      q += parseInt(i) + 1 + ",";
+      q += state.pageList[i].stock_id + ",";
     }
+    console.log(q);
     return q;
   }
 };

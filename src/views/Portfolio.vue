@@ -33,7 +33,7 @@
         lg="4"
         xl="3"
         v-for="stock in stocks"
-        :key="stock.abbr"
+        :key="stock.stock_id"
       >
         <transition name="slide">
           <app-stock :stock="stock" page="portfolio"></app-stock>
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import Stock from "@/components/Stock";
+const Stock = () => import("@/components/stock/StockIndex");
 
 export default {
   name: "Portfolio",

@@ -1,7 +1,6 @@
 <template>
   <div>
     <v-row>
-      <v-col cols="12"> </v-col>
       <v-col :cols="6">
         <h1>Stocks</h1>
       </v-col>
@@ -29,7 +28,7 @@
           </template>
           <v-list dense>
             <v-list-item v-for="(item, index) in sortItems" :key="index" link>
-              <v-list-item-title @click="sortItemsMenu = item">{{
+              <v-list-item-title @click="sortItemsFn(item)">{{
                 item
               }}</v-list-item-title>
             </v-list-item>
@@ -42,20 +41,6 @@
         </v-btn>
       </v-col>
     </v-row>
-    <!--    <v-row>-->
-    <!--      <v-col-->
-    <!--              cols="12"-->
-    <!--              sm="6"-->
-    <!--              md="6"-->
-    <!--              lg="4"-->
-    <!--              xl="3"-->
-    <!--              v-for="stock in stocks"-->
-    <!--              :key="stock.abbr"-->
-    <!--      >-->
-    <!--        <app-stock :stock="stock" page="stocks"></app-stock>-->
-    <!--        <br />-->
-    <!--      </v-col>-->
-    <!--    </v-row>-->
     <v-row>
       <v-col
         cols="12"
@@ -66,21 +51,30 @@
         v-for="stock in stocks"
         :key="stock.stock_id"
       >
-        <app-stock-card :stock="stock" page="stocks"></app-stock-card>
+        <app-stock :stock="stock" page="stocks"></app-stock>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col class="text-center">
+        <v-btn
+          elevation="0"
+          @click="prevPage"
+          :disabled="!$store.state.indicesId >= 1"
+          >&lt; prev</v-btn
+        >
+        <v-btn elevation="0" @click="nextPage">next &gt;</v-btn>
       </v-col>
     </v-row>
   </div>
 </template>
 
 <script>
-// const Stock = () => import("@/components/Stock");
-const StockCard = () => import("@/components/stock/StockIndex");
+const Stock = () => import("@/components/stock/StockIndex");
 
 export default {
   name: "Stocks",
   components: {
-    // "app-stock": Stock,
-    "app-stock-card": StockCard
+    "app-stock": Stock
   },
   computed: {
     stocks() {
@@ -90,7 +84,6 @@ export default {
   data: () => {
     return {
       sortOrder: true,
-      sortedBy: "name",
       sortItemsMenu: "name",
       sortItems: ["name", "price"],
       sortAmountMenu: "30",
@@ -98,7 +91,18 @@ export default {
     };
   },
   methods: {
-    sortBy(b, v = this.sortedBy) {
+    nextPage() {
+      this.$store.dispatch("nextStocksPage");
+    },
+    prevPage() {
+      this.$store.dispatch("prevStocksPage");
+    },
+    sortItemsFn(item) {
+      this.sortItemsMenu = item;
+      this.sortBy(this.sortOrder);
+    },
+    sortBy(b, v = this.sortItemsMenu) {
+      console.log(this.sortItemsMenu);
       this.sortOrder = !b;
       const vm = this;
       if (v === "price") {
