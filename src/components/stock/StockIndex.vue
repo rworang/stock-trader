@@ -118,7 +118,8 @@
           <!--          <span class="currency">{{ stock.price.toLocaleString() }}</span>-->
           <!--          =-->
           <div class="pb-1">
-            Total value of <strong>{{ ownedStock(stock.id) }}</strong> owned stocks
+            Total value of <strong>{{ ownedStock(stock.id) }}</strong> owned
+            stocks
           </div>
           <span class="currency display-2">{{
             (ownedStock(stock.id) * stock.price).toLocaleString()
@@ -282,9 +283,6 @@ export default {
   },
 
   watch: {
-    // stock() {
-    //   console.log(this.stock);
-    // },
     quantity() {
       if (this.alertClicked) {
         if (this.page === "stocks") {
@@ -313,6 +311,22 @@ export default {
     onClickOutside() {
       this.stockInfo = false;
     },
+    cardClick(page) {
+      if (page === "stocks") {
+        this.$refs.buyStock.focus();
+      }
+      if (page === "portfolio") {
+        this.$refs.sellStock.focus();
+      }
+      this.quantity = 0;
+    },
+    ownedStock(id) {
+      let q = 0;
+      if (this.stock.id === id) {
+        q = this.stock.quantity;
+      }
+      return q;
+    },
     setQuantity(v) {
       this.quantity = v;
     },
@@ -328,59 +342,44 @@ export default {
         this.quantity = q - 1;
       }
     },
-    ownedStock(id) {
-      let q = 0;
-      if (this.stock.id === id) {
-        q = this.stock.quantity;
-      }
-      return q;
-    },
     buyLimit(price) {
       console.log(Math.round(this.funds / price) * price);
       return Math.floor(this.funds / price);
     },
-    cardClick(page) {
-      if (page === "stocks") {
-        this.$refs.buyStock.focus();
-      }
-      if (page === "portfolio") {
-        this.$refs.sellStock.focus();
-      }
-      this.quantity = 0;
-    },
     buyStock() {
+      const order = {
+        stockId: this.stock.id,
+        stockPrice: this.stock.price,
+        quantity: this.quantity
+      };
       if (
-        !this.insufficientFunds ||
-        this.quantity !== null ||
-        !Number.isNaN(this.quantity)
+        !Number.isNaN(this.quantity) &&
+        !this.insufficientFunds &&
+        this.quantity !== null &&
+        this.quantity !== 0 &&
+        this.quantity !== undefined &&
+        this.quantity * this.stock.price < this.funds
       ) {
-        const order = {
-          stockId: this.stock.id,
-          stockPrice: this.stock.price,
-          quantity: this.quantity
-        };
         this.$store.dispatch("buyStock", order);
-        this.quantity = null;
+        this.quantity = 0;
       }
     },
     sellStock() {
+      const order = {
+        stockId: this.stock.id,
+        stockPrice: this.stock.price,
+        quantity: this.quantity
+      };
       if (
-        !this.insufficientQuantity ||
-        this.quantity !== null ||
-        !Number.isNaN(this.quantity)
+        !Number.isNaN(this.quantity) &&
+        !this.insufficientQuantity &&
+        this.quantity !== null &&
+        this.quantity !== 0 &&
+        this.quantity !== undefined
       ) {
-        const order = {
-          stockId: this.stock.id,
-          stockPrice: this.stock.price,
-          quantity: this.quantity
-        };
         this.$store.dispatch("sellStock", order);
-        this.quantity = null;
+        this.quantity = 0;
       }
-    },
-    openCard(e, id) {
-      console.log("I clicked the card with id: " + id);
-      this.clicked = !this.clicked;
     }
   }
 };
