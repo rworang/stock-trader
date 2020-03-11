@@ -1,95 +1,106 @@
 <template>
-  <v-app>
-    <v-navigation-drawer v-model="drawer" color="#272727" app temporary dark>
-      <v-list dense>
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title class="title">
-              {{ $appName }}
-            </v-list-item-title>
-            <v-list-item-subtitle class="font-italic">
-              Invest in a new future!
-            </v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item link to="/">
-          <v-list-item-action>
-            <v-icon>mdi-cash-multiple</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Stocks</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item link to="/portfolio">
-          <v-list-item-action>
-            <v-icon>mdi-briefcase</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Portfolio</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item link>
-          <v-list-item-action>
-            <v-icon>mdi-stop-circle-outline</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>End Day</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-
-    <v-app-bar app dark>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title class="mr-4">{{ $appName }}</v-toolbar-title>
-      <v-btn elevation="0" class="text-capitalize" tile to="/">Stocks</v-btn>
-      <v-btn elevation="0" class="text-capitalize" tile to="/portfolio"
-        >Portfolio</v-btn
-      >
-      <v-spacer></v-spacer>
-      <v-btn elevation="0" class="text-capitalize" tile>End Day</v-btn>
-      <v-menu offset-y left>
-        <template v-slot:activator="{ on }">
-          <v-btn elevation="0" v-on="on" class="text-capitalize">
-            Save &amp; Load
-          </v-btn>
-        </template>
-        <v-list dense>
-          <v-list-item @click="saveDay" class="text-capitalize">
-            <v-list-item-icon class="mr-4">
-              <v-icon>mdi-content-save</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Save Day</v-list-item-title>
+  <v-theme-provider root>
+    <v-app>
+      <v-navigation-drawer v-model="drawer" app temporary>
+        <v-list dense class="flex-column" height="100%">
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title class="title">
+                {{ $appName }}
+              </v-list-item-title>
+              <v-list-item-subtitle class="font-italic">
+                Invest in a new future!
+              </v-list-item-subtitle>
+            </v-list-item-content>
           </v-list-item>
-          <v-list-item @click="loadDay">
-            <v-list-item-icon class="mr-4">
-              <v-icon>mdi-download</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Load Day</v-list-item-title>
+          <v-list-item link to="/">
+            <v-list-item-action>
+              <v-icon>mdi-cash-multiple</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>Stocks</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item link to="/portfolio">
+            <v-list-item-action>
+              <v-icon>mdi-briefcase</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>Portfolio</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item link>
+            <v-list-item-action>
+              <v-icon>mdi-stop-circle-outline</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>End Day</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-switch
+              v-model="$vuetify.theme.dark"
+              label="Light/dark theme"
+              hide-details
+              dense
+              inset
+            ></v-switch>
           </v-list-item>
         </v-list>
-      </v-menu>
-      <v-btn elevation="0" class="text-capitalize" tile>
-        <span class="currency">{{
-          $store.getters.funds.toLocaleString()
-        }}</span>
-      </v-btn>
-    </v-app-bar>
+      </v-navigation-drawer>
 
-    <v-content>
-      <v-container>
-        <router-view></router-view>
-      </v-container>
-    </v-content>
+      <v-app-bar app>
+        <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+        <v-toolbar-title class="mr-4">{{ $appName }}</v-toolbar-title>
+        <v-btn elevation="0" class="text-capitalize" tile to="/">Stocks</v-btn>
+        <v-btn elevation="0" class="text-capitalize" tile to="/portfolio"
+          >Portfolio</v-btn
+        >
+        <v-spacer></v-spacer>
+        <v-btn elevation="0" class="text-capitalize" tile>End Day</v-btn>
+        <v-menu offset-y left>
+          <template v-slot:activator="{ on }">
+            <v-btn elevation="0" v-on="on" class="text-capitalize">
+              Save &amp; Load
+            </v-btn>
+          </template>
+          <v-list dense>
+            <v-list-item @click="saveDay" class="text-capitalize">
+              <v-list-item-icon class="mr-4">
+                <v-icon>mdi-content-save</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>Save Day</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="loadDay">
+              <v-list-item-icon class="mr-4">
+                <v-icon>mdi-download</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>Load Day</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+        <v-btn elevation="0" class="text-capitalize" tile>
+          <span class="currency">{{
+            $store.getters.funds.toLocaleString()
+          }}</span>
+        </v-btn>
+      </v-app-bar>
 
-    <v-footer app absolute>
-      <v-row>
-        <v-col class="white--text text-center">
-          {{ $appName + " &copy; " + $date().format("YYYY") }}
-        </v-col>
-      </v-row>
-    </v-footer>
-  </v-app>
+      <v-content>
+        <v-container>
+          <router-view></router-view>
+        </v-container>
+      </v-content>
+
+      <v-footer app absolute>
+        <v-row>
+          <v-col class="white--text text-center">
+            {{ $appName + " &copy; " + $date().format("YYYY") }}
+          </v-col>
+        </v-row>
+      </v-footer>
+    </v-app>
+  </v-theme-provider>
 </template>
 
 <script>
@@ -98,6 +109,7 @@ export default {
   components: {},
   created() {
     // this.$store.dispatch("initStocks");
+    console.log(this.$vuetify.theme.dark);
   },
   data: () => ({
     drawer: false,

@@ -47,6 +47,9 @@ export default {
   computed: {
     stocks() {
       return this.$store.getters.stocks;
+    },
+    pageAmount() {
+      return this.$store.state.pageAmount;
     }
   },
   mounted() {

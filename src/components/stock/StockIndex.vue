@@ -1,11 +1,10 @@
 <template>
   <v-card
     outlined
-    dark
     @click="cardClick(page)"
     :elevation="elevation"
     @mouseenter="elevation = 5"
-    @mouseleave="elevation = 0"
+    @mouseleave="elevation = 1"
     v-click-outside="onClickOutside"
   >
     <v-container fluid class="pb-0">
@@ -73,7 +72,6 @@
             label="Buy stocks"
             ref="buyStock"
             dense
-            dark
           ></v-text-field>
         </v-col>
         <v-col :cols="4">
@@ -118,8 +116,8 @@
         </v-col>
       </v-row>
 
-      <v-row v-if="page === 'portfolio'" class="">
-        <v-col cols="12" class="py-2 border-light-t">
+      <v-row v-if="page === 'portfolio'">
+        <v-col cols="12" :class="'py-2 border-' + ($vuetify.theme.dark ? 'light' : 'dark') + '-t'">
           <v-row>
             <v-col cols="12" class="py-0">
               <div>
@@ -159,24 +157,6 @@
             </v-col>
           </v-row>
         </v-col>
-        <!--        <v-col cols="4" class="py-2 pr-0 border-light-r">-->
-        <!--          <div>-->
-        <!--            Bought at-->
-        <!--          </div>-->
-        <!--          <div class="currency">{{ stock.bought_at }}</div>-->
-        <!--        </v-col>-->
-        <!--        <v-col cols="8" class="py-2 pl-0 text-right">-->
-        <!--          <div>-->
-        <!--            Total value of-->
-        <!--            <strong @click="quantity = ownedStock(stock.id)">{{-->
-        <!--              ownedStock(stock.id)-->
-        <!--              }}</strong>-->
-        <!--            owned stocks-->
-        <!--          </div>-->
-        <!--          <div class="currency display-2" style="font-size: 2.2rem!important;">-->
-        <!--            {{ (ownedStock(stock.id) * stock.price).toLocaleString() }}-->
-        <!--          </div>-->
-        <!--        </v-col>-->
       </v-row>
 
       <transition name="slide-fast">
@@ -203,14 +183,13 @@
       </transition>
 
       <v-row>
-        <v-col cols="12" class="pa-0 text-center border-light-y">
+        <v-col cols="12" :class="'pa-0 text-center border-' + ($vuetify.theme.dark ? 'light' : 'dark') + '-y'">
           <v-btn
             small
             block
             color="transparent"
             elevation="0"
             @click="stockInfo = !stockInfo"
-            class="grey--text text--darken-1 grey-text-hover"
           >
             <span v-if="!stockInfo">
               Show information
@@ -311,7 +290,7 @@ export default {
     stockInfo: false,
     alertClicked: false,
     quantity: 0,
-    elevation: 0,
+    elevation: 1,
     clicked: false
   }),
 
@@ -443,10 +422,6 @@ export default {
 
 <style scoped lang="scss">
 .v-card:hover {
-  background: #2e2e2e;
   cursor: default;
-}
-.grey-text-hover:hover {
-  color: #fff !important;
 }
 </style>

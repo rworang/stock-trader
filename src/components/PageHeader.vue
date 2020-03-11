@@ -3,6 +3,7 @@
     <v-col cols="12" sm="4">
       <h1 class="text-capitalize">{{ page }}</h1>
     </v-col>
+
     <v-col cols="12" sm="8" class="text-right pt-5">
       <v-btn elevation="0" @click.stop="refreshData" class="border-radius-l"
         >Refresh <v-icon small>mdi-refresh</v-icon></v-btn
