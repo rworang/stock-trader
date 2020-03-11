@@ -31,6 +31,7 @@
 </template>
 <script>
 const Stock = () => import("@/components/stock/StockIndex");
+// import Stock from "@/components/stock/StockIndex";
 import PageHeader from "@/components/PageHeader";
 
 export default {

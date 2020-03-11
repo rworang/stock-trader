@@ -12,7 +12,7 @@
         <template v-slot:activator="{ on }">
           <v-btn v-on="on" elevation="0"> Results: {{ sortAmountMenu }} </v-btn>
         </template>
-        <v-list dense>
+        <v-list>
           <v-list-item
             v-for="(item, index) in sortAmount"
             :key="index"
@@ -28,7 +28,7 @@
         <template v-slot:activator="{ on }">
           <v-btn v-on="on" elevation="0"> Sort by: {{ sortItemsMenu }} </v-btn>
         </template>
-        <v-list dense>
+        <v-list>
           <v-list-item
             v-for="(item, index) in sortItems"
             :key="index"

@@ -109,7 +109,6 @@ export default {
   components: {},
   created() {
     // this.$store.dispatch("initStocks");
-    console.log(this.$vuetify.theme.dark);
   },
   data: () => ({
     drawer: false,
@@ -117,10 +116,10 @@ export default {
   }),
   methods: {
     saveDay() {
-      console.log("Save day");
+      // console.log("Save day");
     },
     loadDay() {
-      console.log("Load day");
+      // console.log("Load day");
     }
   }
 };

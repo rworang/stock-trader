@@ -6,6 +6,7 @@
     @mouseenter="elevation = 5"
     @mouseleave="elevation = 1"
     v-click-outside="onClickOutside"
+    :class="$vuetify.theme.dark ? 'card-hover-dark' : 'card-hover-light'"
   >
     <v-container fluid class="pb-0">
       <v-row>
@@ -25,7 +26,13 @@
             </span>
           </div>
         </v-col>
-        <v-col cols="5" class="text-right py-0 pl-0">
+        <v-col
+          cols="5"
+          class="text-right py-0 pl-0 border-radius-l"
+          :style="
+            'background: ' + ($vuetify.theme.dark ? '#373740' : '#fff') + ';'
+          "
+        >
           <div class="currency display-1" title="Price in Dollars">
             {{ stock.price.toLocaleString() }}
           </div>
@@ -45,7 +52,7 @@
           <div class="body-2">
             change:
             <span
-              class="font-weight-bold pr-3"
+              class="font-weight-bold pr-2"
               :class="changeColor"
               title="Change"
             >
@@ -97,7 +104,6 @@
             label="Sell stocks"
             ref="sellStock"
             dense
-            dark
           ></v-text-field>
         </v-col>
         <v-col :cols="4">
@@ -144,7 +150,9 @@
               <div class="grey--text">
                 Bought at
               </div>
-              <div class="currency">{{ stock.bought_at.toLocaleString() }}</div>
+              <div class="currency">
+                {{ stock.bought_at.toLocaleString() }}
+              </div>
             </v-col>
 
             <v-col cols="4" class="py-0 pr-0">
@@ -152,12 +160,7 @@
                 Profit/loss
               </div>
               <div class="currency">
-                {{
-                  (
-                    (stock.bought_at - stock.price) *
-                    ownedStock(stock.id)
-                  ).toLocaleString()
-                }}
+                <span v-html="calcProfitLoss"></span>
               </div>
             </v-col>
           </v-row>
@@ -279,6 +282,16 @@
           </v-container>
         </v-row>
       </v-expand-transition>
+      <v-snackbar
+        v-model="snackbar"
+        top
+        right
+        :timeout="4000"
+        style="margin-top: 64px;"
+        @click="snackbar = false"
+      >
+        <span v-html="snackbarMessage"></span>
+      </v-snackbar>
     </v-container>
   </v-card>
 </template>
@@ -299,6 +312,8 @@ export default {
   },
 
   data: () => ({
+    snackbar: false,
+    snackbarMessage: "I am a snackbar!",
     stockInfo: false,
     alertClicked: false,
     quantity: 0,
@@ -312,6 +327,18 @@ export default {
     },
     funds() {
       return this.$store.getters.funds;
+    },
+    calcProfitLoss() {
+      let r =
+        (this.stock.price - this.stock.bought_at) *
+        this.ownedStock(this.stock.id);
+      if (Math.sign(r) === -1) {
+        return "<span class='red--text'>" + r.toLocaleString() + "</span>";
+      } else if (Math.sign(r) === 1) {
+        return "<span class='green--text'>" + r.toLocaleString() + "</span>";
+      } else {
+        return r.toLocaleString();
+      }
     },
     insufficientFunds() {
       return this.quantity * this.stock.price > this.funds;
@@ -394,10 +421,11 @@ export default {
       return Math.floor(this.funds / price);
     },
     buyStock() {
+      this.snackbar = false;
       const order = {
         stockId: this.stock.id,
         stockPrice: this.stock.price,
-        quantity: this.quantity
+        quantity: Math.floor(this.quantity)
       };
       if (
         !Number.isNaN(this.quantity) &&
@@ -409,9 +437,19 @@ export default {
       ) {
         this.$store.dispatch("buyStock", order);
         this.quantity = 0;
+        this.snackbarMessage =
+          "You bought <strong>" +
+          order.quantity +
+          " " +
+          this.stock.name +
+          "</strong> stocks for <span class='currency font-weight-bold'>" +
+          (order.quantity * order.stockPrice).toLocaleString() +
+          "</span>";
+        this.snackbar = true;
       }
     },
     sellStock() {
+      this.snackbar = false;
       const order = {
         stockId: this.stock.id,
         stockPrice: this.stock.price,
@@ -426,6 +464,15 @@ export default {
       ) {
         this.$store.dispatch("sellStock", order);
         this.quantity = 0;
+        this.snackbarMessage =
+          "You sold <strong>" +
+          order.quantity +
+          " " +
+          this.stock.name +
+          "</strong> stocks for <span class='currency font-weight-bold'>" +
+          (order.quantity * order.stockPrice).toLocaleString() +
+          "</span>";
+        this.snackbar = true;
       }
     }
   }
@@ -435,5 +482,16 @@ export default {
 <style scoped lang="scss">
 .v-card:hover {
   cursor: default;
+}
+.card-hover-dark, .card-hover-light {
+  padding: 3px;
+}
+.card-hover-dark:hover {
+  border: solid 4px #1eb980;
+  padding: 0;
+}
+.card-hover-light:hover {
+  border: solid 4px #1976d2;
+  padding: 0;
 }
 </style>
