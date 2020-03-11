@@ -1,5 +1,5 @@
 const state = {
-  funds: 250000,
+  funds: 2500000,
   stocks: []
 };
 
@@ -48,13 +48,14 @@ const getters = {
       return {
         id: stock.id,
         quantity: stock.quantity,
-        bought_at: stock.bought_at,
+        bought_at: record.price,
 
         short_name: record.short_name,
         name: record.name,
         price: record.price,
         low: record.low,
         high: record.high,
+        chg: record.chg,
         chg_percent: record.chg_percent,
         country: record.country,
         dateTime: record.dateTime,

@@ -7,7 +7,7 @@ const base_url = "https://fcsapi.com/api-v2/stock";
 const api_key = "&access_key=" + "XvmL2QYjfPLCLLMqldUxWA6RsBFxCmxLR7I5W6sAtapQKbltGg";
 
 const state = {
-  indicesId: 1,
+  indicesId: 2,
   pageAmount: 30,
   pageList: [],
   pagePrices: [],

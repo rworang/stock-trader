@@ -21,9 +21,8 @@
             }}</span>
           </div>
           <div class="headline grey--text text--lighten-1">
-            <span title="Stock full name">
-              <span v-if="stock.short_name !== 'MCD'">{{ stock.name }}</span>
-              <span v-else>McDonald's</span>
+            <span title="Stock full name"
+              >{{ stock.name.replace(/[\u{0080}-\u{FFFF}]/gu, "") }}
             </span>
           </div>
         </v-col>
@@ -44,12 +43,21 @@
           <div v-else @click="quantity = ownedStock(stock.id)">
             Owned amount: {{ ownedStock(stock.id) }}
           </div>
-          <div>
-            <span class="body-2" title="Change in percentages"
-              >change:
-              <span :class="changeColor + ' font-weight-bold'">{{
-                stock.chg_percent
-              }}</span></span
+          <div class="body-2">
+            change:
+            <span
+              class="font-weight-bold pr-3"
+              :class="changeColor"
+              title="Change"
+            >
+              {{ stock.chg }}</span
+            >
+
+            <span
+              class="font-weight-bold"
+              :class="changeColor"
+              title="Change in percentage"
+              >{{ stock.chg_percent }}</span
             >
           </div>
         </v-col>
@@ -110,27 +118,89 @@
         </v-col>
       </v-row>
 
-      <v-row>
-        <v-divider light></v-divider>
+      <v-row v-if="page === 'portfolio'" class="">
+        <v-col cols="12" class="py-2 border-light-t">
+          <v-row>
+            <v-col cols="12" class="py-0">
+              <div>
+                Total value of
+                <strong @click="quantity = ownedStock(stock.id)">{{
+                  ownedStock(stock.id)
+                }}</strong>
+                owned stocks
+              </div>
+              <div
+                class="currency display-2"
+                style="font-size: 2.2rem!important;"
+              >
+                {{ (ownedStock(stock.id) * stock.price).toLocaleString() }}
+              </div>
+            </v-col>
+
+            <v-col cols="3" class="py-0 pr-0">
+              <div class="grey--text">
+                Bought at
+              </div>
+              <div class="currency">{{ stock.bought_at.toLocaleString() }}</div>
+            </v-col>
+
+            <v-col cols="4" class="py-0 pr-0">
+              <div class="grey--text">
+                Profit/loss
+              </div>
+              <div class="currency">
+                {{
+                  (
+                    (stock.bought_at - stock.price) *
+                    ownedStock(stock.id)
+                  ).toLocaleString()
+                }}
+              </div>
+            </v-col>
+          </v-row>
+        </v-col>
+        <!--        <v-col cols="4" class="py-2 pr-0 border-light-r">-->
+        <!--          <div>-->
+        <!--            Bought at-->
+        <!--          </div>-->
+        <!--          <div class="currency">{{ stock.bought_at }}</div>-->
+        <!--        </v-col>-->
+        <!--        <v-col cols="8" class="py-2 pl-0 text-right">-->
+        <!--          <div>-->
+        <!--            Total value of-->
+        <!--            <strong @click="quantity = ownedStock(stock.id)">{{-->
+        <!--              ownedStock(stock.id)-->
+        <!--              }}</strong>-->
+        <!--            owned stocks-->
+        <!--          </div>-->
+        <!--          <div class="currency display-2" style="font-size: 2.2rem!important;">-->
+        <!--            {{ (ownedStock(stock.id) * stock.price).toLocaleString() }}-->
+        <!--          </div>-->
+        <!--        </v-col>-->
       </v-row>
 
-      <v-row v-if="page === 'portfolio'" class="">
-        <v-col cols="12" class="py-2">
-          <!--          {{ ownedStock(stock.id) }} x-->
-          <!--          <span class="currency">{{ stock.price.toLocaleString() }}</span>-->
-          <!--          =-->
-          <div class="pb-1">
-            Total value of
-            <strong @click="quantity = ownedStock(stock.id)">{{
-              ownedStock(stock.id)
-            }}</strong>
-            owned stocks
-          </div>
-          <span class="currency display-2">{{
-            (ownedStock(stock.id) * stock.price).toLocaleString()
-          }}</span>
-        </v-col>
-      </v-row>
+      <transition name="slide-fast">
+        <v-row
+          v-if="
+            (page === 'stocks' && insufficientFunds) ||
+              (page === 'portfolio' && insufficientQuantity)
+          "
+          @click="alertClicked = !alertClicked"
+        >
+          <v-col class="pa-0">
+            <v-alert dense type="error" class="ma-0">
+              <span v-if="page === 'stocks' && insufficientFunds">
+                Insufficient funds, can only buy
+                <strong>{{ buyLimit(stock.price) }}</strong> stock
+              </span>
+              <span v-if="page === 'portfolio' && insufficientQuantity">
+                Not enough quantity, can only sell
+                <strong>{{ ownedStock(stock.id) }}</strong> stock
+              </span>
+            </v-alert>
+          </v-col>
+        </v-row>
+      </transition>
 
       <v-row>
         <v-col cols="12" class="pa-0 text-center border-light-y">
@@ -210,32 +280,14 @@
                 </div>
               </v-col>
             </v-row>
+            <v-row>
+              <v-col class="body-2 pb-0 text-right">
+                Last updated: {{ stock.dateTime }}
+              </v-col>
+            </v-row>
           </v-container>
         </v-row>
       </v-expand-transition>
-
-      <transition name="slide-fast">
-        <v-row
-          v-if="
-            (page === 'stocks' && insufficientFunds) ||
-              (page === 'portfolio' && insufficientQuantity)
-          "
-          @click="alertClicked = !alertClicked"
-        >
-          <v-col class="pa-0">
-            <v-alert dense type="error" class="ma-0">
-              <span v-if="page === 'stocks' && insufficientFunds">
-                Insufficient funds, can only buy
-                <strong>{{ buyLimit(stock.price) }}</strong> stock
-              </span>
-              <span v-if="page === 'portfolio' && insufficientQuantity">
-                Not enought quantity, can only sell
-                <strong>{{ ownedStock(stock.id) }}</strong> stock
-              </span>
-            </v-alert>
-          </v-col>
-        </v-row>
-      </transition>
     </v-container>
   </v-card>
 </template>
@@ -277,9 +329,9 @@ export default {
       return this.quantity > this.stock.quantity;
     },
     changeColor() {
-      if (this.stock.chg_percent[0] === "-") {
+      if (this.stock.chg[0] === "-") {
         return "red--text";
-      } else if (this.stock.chg_percent[0] === "+") {
+      } else if (this.stock.chg[0] === "+") {
         return "green--text";
       } else {
         return "white--text";
@@ -289,27 +341,27 @@ export default {
 
   watch: {
     quantity() {
-      if (this.alertClicked) {
-        if (this.page === "stocks") {
-          this.quantity = this.buyLimit(this.stock.price);
-          this.alertClicked = !this.alertClicked;
-        }
-        if (this.page === "portfolio") {
-          this.quantity = this.ownedStock(this.stock.id);
-          this.alertClicked = !this.alertClicked;
-        }
-      } else {
-        if (!Number.isInteger(this.quantity)) {
-          this.quantity = parseInt(this.quantity);
-        }
-        if (Number.isNaN(this.quantity)) {
-          this.quantity = this.stock.quantity;
-        }
-        if (this.quantity === undefined || this.quantity === null) {
-          this.quantity = 0;
-        }
+      if (!Number.isInteger(this.quantity)) {
+        this.quantity = parseInt(this.quantity);
       }
-      console.log(this.quantity);
+      if (
+        Number.isNaN(this.quantity) ||
+        this.quantity === undefined ||
+        this.quantity === null ||
+        this.quantity === ""
+      ) {
+        this.quantity = 0;
+      }
+    },
+    alertClicked() {
+      if (this.alertClicked && this.page === "portfolio") {
+        this.setQuantity(this.ownedStock(this.stock.id));
+        this.alertClicked = false;
+      }
+      if (this.alertClicked && this.page === "stocks") {
+        this.setQuantity(this.buyLimit(this.stock.price));
+        this.alertClicked = false;
+      }
     }
   },
 
@@ -396,53 +448,5 @@ export default {
 }
 .grey-text-hover:hover {
   color: #fff !important;
-}
-
-.border-dark-y {
-  border-top: solid 1px rgba(0, 0, 0, 0.1);
-  border-bottom: solid 1px rgba(0, 0, 0, 0.1);
-}
-.border-dark-x {
-  border-left: solid 1px rgba(0, 0, 0, 0.1);
-  border-right: solid 1px rgba(0, 0, 0, 0.1);
-}
-.border-dark-t {
-  border-top: solid 1px rgba(0, 0, 0, 0.1);
-}
-.border-dark-r {
-  border-right: solid 1px rgba(0, 0, 0, 0.1);
-}
-.border-dark-b {
-  border-bottom: solid 1px rgba(0, 0, 0, 0.1);
-}
-.border-dark-l {
-  border-left: solid 1px rgba(0, 0, 0, 0.1);
-}
-.border-dark-a {
-  border: solid 1px rgba(0, 0, 0, 0.1);
-}
-
-.border-light-y {
-  border-top: solid 1px rgba(255, 255, 255, 0.1);
-  border-bottom: solid 1px rgba(255, 255, 255, 0.1);
-}
-.border-light-x {
-  border-left: solid 1px rgba(255, 255, 255, 0.1);
-  border-right: solid 1px rgba(255, 255, 255, 0.1);
-}
-.border-light-t {
-  border-top: solid 1px rgba(255, 255, 255, 0.1);
-}
-.border-light-r {
-  border-right: solid 1px rgba(255, 255, 255, 0.1);
-}
-.border-light-b {
-  border-bottom: solid 1px rgba(255, 255, 255, 0.1);
-}
-.border-light-l {
-  border-left: solid 1px rgba(255, 255, 255, 0.1);
-}
-.border-light-a {
-  border: solid 1px rgba(255, 255, 255, 0.1);
 }
 </style>
