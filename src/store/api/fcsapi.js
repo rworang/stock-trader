@@ -4,7 +4,8 @@ import stocks from "@/data/stocks";
 
 const base_url = "https://fcsapi.com/api-v2/stock";
 // const api_key = "&access_key=" + "lCkUeANtGkhqy801AwWz0RiBNy6W9OROG0LrJAFECXaAez";
-const api_key = "&access_key=" + "XvmL2QYjfPLCLLMqldUxWA6RsBFxCmxLR7I5W6sAtapQKbltGg";
+const api_key =
+  "&access_key=" + "XvmL2QYjfPLCLLMqldUxWA6RsBFxCmxLR7I5W6sAtapQKbltGg";
 
 const state = {
   indicesId: 2,
@@ -18,9 +19,11 @@ const state = {
 
 const mutations = {
   START_LOAD(state) {
+    // console.log("START_LOAD");
     state.loading = true;
   },
   STOP_LOAD(state) {
+    // console.log("STOP_LOAD");
     state.loading = false;
   },
   SET_API_MSG(state, payload) {
@@ -28,23 +31,22 @@ const mutations = {
   },
   SET_PAGE_STOCKS(state, payload) {
     state.pageList = payload;
-    console.log(state.pageList);
+    // console.log(state.pageList);
   },
   SET_PAGE_PRICES(state, payload) {
     state.pagePrices = payload;
-    console.log(state.pagePrices);
+    // console.log(state.pagePrices);
   },
   SET_PAGE_PROFILES(state, payload) {
     state.pageProfiles = payload;
-    console.log(state.pageProfiles);
+    // console.log(state.pageProfiles);
   },
   LOAD_NEXT_PAGE(state) {
-    console.log("Loading next page");
+    // console.log("Loading next page");
     state.indicesId++;
   },
   LOAD_PREV_PAGE(state) {
-    console.log("Loading prev page");
-
+    // console.log("Loading prev page");
     state.indicesId--;
   },
   MERGE_STOCKS(state) {
@@ -60,7 +62,7 @@ const mutations = {
         )
       });
     }
-    console.log("Merged responses:", merged);
+    // console.log("Merged responses:", merged);
     state.stocks = merged;
   }
 };
@@ -78,8 +80,8 @@ const actions = {
         commit("MERGE_STOCKS");
         commit("STOP_LOAD", "SUCCESS: initStocks");
       })
-      .catch(err => {
-        console.log("prices error: /n", err);
+      .catch(() => {
+        // console.log("prices error: /n", err);
         commit("STOP_LOAD", "ERROR: initStocks");
       });
   },
@@ -88,13 +90,13 @@ const actions = {
     return axios
       .get(base_url + "/list?indices_id=" + state.indicesId + api_key)
       .then(r => {
-        console.log(r);
-        console.warn("API message :", r.data.msg);
+        // console.log(r);
+        // console.warn("API message :", r.data.msg);
         commit("SET_PAGE_STOCKS", r.data.response);
         commit("STOP_LOAD", "SUCCESS: loadPageStocks");
       })
-      .catch(err => {
-        console.log("prices error: /n", err);
+      .catch(() => {
+        // console.log("prices error: /n", err);
         commit("STOP_LOAD", "ERROR: loadPageStocks");
       });
   },
@@ -103,13 +105,13 @@ const actions = {
     return axios
       .get(base_url + "/latest?id=" + getters.pageIdQuery + api_key)
       .then(r => {
-        console.log(r);
-        console.warn("API message :", r.data.msg);
+        // console.log(r);
+        // console.warn("API message :", r.data.msg);
         commit("SET_PAGE_PRICES", r.data.response);
         commit("STOP_LOAD", "SUCCESS: loadPagePrices");
       })
-      .catch(err => {
-        console.log("prices error: /n", err);
+      .catch(() => {
+        // console.log("prices error: /n", err);
         commit("STOP_LOAD", "ERROR: loadPagePrices");
       });
   },
@@ -118,13 +120,13 @@ const actions = {
     return axios
       .get(base_url + "/profile?id=" + getters.pageIdQuery + api_key)
       .then(r => {
-        console.log(r);
-        console.warn("API message :", r.data.msg);
+        // console.log(r);
+        // console.warn("API message :", r.data.msg);
         commit("SET_PAGE_PROFILES", r.data.response);
         commit("STOP_LOAD", "SUCCESS: loadPageProfiles");
       })
-      .catch(err => {
-        console.log("prices error: /n", err);
+      .catch(() => {
+        // console.log("prices error: /n", err);
         commit("STOP_LOAD", "ERROR: loadPageProfiles");
       });
   },
@@ -158,7 +160,7 @@ const getters = {
     for (let i in state.pageList) {
       q += state.pageList[i].stock_id + ",";
     }
-    console.log(q);
+    // console.log(q);
     return q;
   }
 };

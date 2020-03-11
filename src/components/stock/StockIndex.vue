@@ -117,7 +117,12 @@
       </v-row>
 
       <v-row v-if="page === 'portfolio'">
-        <v-col cols="12" :class="'py-2 border-' + ($vuetify.theme.dark ? 'light' : 'dark') + '-t'">
+        <v-col
+          cols="12"
+          :class="
+            'py-2 border-' + ($vuetify.theme.dark ? 'light' : 'dark') + '-t'
+          "
+        >
           <v-row>
             <v-col cols="12" class="py-0">
               <div>
@@ -183,7 +188,14 @@
       </transition>
 
       <v-row>
-        <v-col cols="12" :class="'pa-0 text-center border-' + ($vuetify.theme.dark ? 'light' : 'dark') + '-y'">
+        <v-col
+          cols="12"
+          :class="
+            'pa-0 text-center border-' +
+              ($vuetify.theme.dark ? 'light' : 'dark') +
+              '-y'
+          "
+        >
           <v-btn
             small
             block
