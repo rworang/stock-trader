@@ -130,7 +130,7 @@
           <v-row>
             <v-col cols="12" class="py-0">
               <div>
-                Total value of
+                Total current value of
                 <strong @click="quantity = ownedStock(stock.id)">{{
                   ownedStock(stock.id)
                 }}</strong>
@@ -143,25 +143,88 @@
                 {{ (ownedStock(stock.id) * stock.price).toLocaleString() }}
               </div>
             </v-col>
-
-            <v-col cols="3" class="py-0 pr-0">
+          </v-row>
+          <v-row>
+            <v-divider light></v-divider>
+          </v-row>
+          <v-row class="pt-2">
+            <v-col class="py-0" cols="12">
+              <div class="headline">Last 3 buy orders</div>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="2" class="py-0 pr-0 text-right">
+              <div class="grey--text">
+                Amount
+              </div>
+            </v-col>
+            <v-col class="py-0 pr-0">
               <div class="grey--text">
                 Bought at
               </div>
-              <div class="currency">
-                {{ stock.bought_at.toLocaleString() }}
-              </div>
             </v-col>
-
-            <v-col cols="4" class="py-0 pr-0">
+            <v-col class="py-0 pr-0">
               <div class="grey--text">
                 Profit/loss
               </div>
-              <div class="currency">
-                <span v-html="calcProfitLoss"></span>
+            </v-col>
+            <v-col cols="5" class="py-0 pr-0">
+              <div class="grey--text">
+                Buy date/time
               </div>
             </v-col>
           </v-row>
+          <v-row v-for="logEntry in log.slice(log.length - 3, log.length).reverse()" :key="logEntry.dateTime">
+            <v-col cols="2" class="py-0 pr-1 text-right">
+              <div>
+                {{ logEntry.quantity }}
+              </div>
+            </v-col>
+
+            <v-col class="py-0 pr-1">
+              <div class="currency">
+                {{ logEntry.bought_at }}
+              </div>
+            </v-col>
+
+            <v-col class="py-0 pr-1">
+              <div class="currency">
+                <span
+                  v-html="calcProfitLoss(logEntry.bought_at, logEntry.quantity)"
+                ></span>
+              </div>
+            </v-col>
+
+            <v-col cols="5" class="py-0 pr-1">
+              <div>
+                {{ logEntry.dateTime }}
+              </div>
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col
+          cols="12"
+          :class="
+            'pa-0 text-center border-' +
+              ($vuetify.theme.dark ? 'light' : 'dark') +
+              '-t'
+          "
+        >
+          <v-btn
+            small
+            block
+            color="transparent"
+            elevation="0"
+            @click="stockHistory = !stockHistory"
+          >
+            Show full stock order history
+            <span v-if="!stockHistory">
+              <v-icon>mdi-chevron-double-right</v-icon>
+            </span>
+            <span v-if="stockHistory">
+              <v-icon>mdi-chevron-double-left</v-icon>
+            </span>
+          </v-btn>
         </v-col>
       </v-row>
 
@@ -204,12 +267,11 @@
             elevation="0"
             @click="stockInfo = !stockInfo"
           >
+            Stock information
             <span v-if="!stockInfo">
-              Show information
               <v-icon>mdi-chevron-double-down</v-icon>
             </span>
             <span v-if="stockInfo">
-              Hide information
               <v-icon>mdi-chevron-double-up</v-icon>
             </span>
           </v-btn>
@@ -311,9 +373,11 @@ export default {
   },
 
   data: () => ({
+    logHistory: [],
     snackbar: false,
     snackbarMessage: "I am a snackbar!",
     stockInfo: false,
+    stockHistory: false,
     alertClicked: false,
     quantity: 0,
     elevation: 1,
@@ -321,23 +385,16 @@ export default {
   }),
 
   computed: {
+    log() {
+      let log = this.$store.getters.log;
+      let entry = log.find(e => e.id === this.stock.id);
+      return entry.history;
+    },
     stocks() {
       return this.$store.getters.stocks;
     },
     funds() {
       return this.$store.getters.funds;
-    },
-    calcProfitLoss() {
-      let r =
-        (this.stock.price - this.stock.bought_at) *
-        this.ownedStock(this.stock.id);
-      if (Math.sign(r) === -1) {
-        return "<span class='red--text'>" + r.toLocaleString() + "</span>";
-      } else if (Math.sign(r) === 1) {
-        return "<span class='green--text'>" + r.toLocaleString() + "</span>";
-      } else {
-        return r.toLocaleString();
-      }
     },
     insufficientFunds() {
       return this.quantity * this.stock.price > this.funds;
@@ -383,6 +440,21 @@ export default {
   },
 
   methods: {
+    calcProfitLoss(bought_at, quantity) {
+      let r = (this.stock.price - bought_at) * quantity;
+      if (Math.sign(r) === -1) {
+        return " <span class='red--text'>" + r.toLocaleString() + "</span>";
+      } else if (Math.sign(r) === 1) {
+        return " <span class='green--text'>" + r.toLocaleString() + "</span>";
+      } else {
+        return " " + r.toLocaleString();
+      }
+    },
+    findLogEntry(id) {
+      const entry = this.log.find(element => element.id === id);
+      // console.log(entry.history);
+      return entry;
+    },
     linkTo(name) {
       this.$router.push({ path: name });
       this.snackbar = false;
@@ -428,7 +500,8 @@ export default {
       const order = {
         stockId: this.stock.id,
         stockPrice: this.stock.price,
-        quantity: Math.floor(this.quantity)
+        quantity: Math.floor(this.quantity),
+        dateTime: this.$date().format("DD/MM/YYYY HH:mm:ss")
       };
       if (
         !Number.isNaN(this.quantity) &&
@@ -456,7 +529,8 @@ export default {
       const order = {
         stockId: this.stock.id,
         stockPrice: this.stock.price,
-        quantity: this.quantity
+        quantity: this.quantity,
+        dateTime: this.$date().format("DD/MM/YYYY HH:mm:ss")
       };
       if (
         !Number.isNaN(this.quantity) &&

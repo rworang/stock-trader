@@ -37,6 +37,39 @@
               <v-list-item-title>End Day</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+
+          <v-dialog v-model="dialog" persistent max-width="420">
+            <template v-slot:activator="{ on }">
+              <v-list-item link v-on="on">
+                <v-list-item-action>
+                  <v-icon>mdi-alert-circle</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>Clear local storage</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </template>
+            <v-card>
+              <v-card-title class="headline pb-2"
+                >Clear local storage?</v-card-title
+              >
+              <v-card-text class="py-2">
+                Clearing local storage will result in deletion of all saved
+                state data, this includes
+                <strong>portfolio</strong> data.<br /><br />
+                Pressing "Clear storage" will reload the page.</v-card-text
+              >
+              <v-card-actions class="pt-2">
+                <v-spacer></v-spacer>
+                <v-btn color="white darken-3" text @click="dialog = false"
+                  >Cancel</v-btn
+                >
+                <v-btn color="red darken-4" text @click="clearStorage"
+                  >Clear storage</v-btn
+                >
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
           <v-list-item>
             <v-switch
               v-model="$vuetify.theme.dark"
@@ -112,10 +145,18 @@ export default {
   },
   computed: {},
   data: () => ({
+    dialog: false,
     drawer: false,
     dropdown: ["Save Day", "Load Day"]
   }),
   methods: {
+    clearStorage() {
+      window.localStorage.removeItem("vuex");
+      this.dialog = false;
+      setTimeout(() => {
+        location.reload();
+      }, 250);
+    },
     saveDay() {
       // console.log("Save day");
     },

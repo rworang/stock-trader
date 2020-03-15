@@ -19,17 +19,6 @@
         </v-fade-transition>
       </v-col>
     </v-row>
-    <!--    <v-row>-->
-    <!--      <v-col class="text-center">-->
-    <!--        <v-btn-->
-    <!--          elevation="0"-->
-    <!--          @click="prevPage"-->
-    <!--          :disabled="!$store.state.indicesId >= 1"-->
-    <!--          >&lt; prev</v-btn-->
-    <!--        >-->
-    <!--        <v-btn elevation="0" @click="nextPage">next &gt;</v-btn>-->
-    <!--      </v-col>-->
-    <!--    </v-row>-->
   </div>
 </template>
 <script>

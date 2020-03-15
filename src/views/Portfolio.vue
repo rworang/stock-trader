@@ -20,14 +20,14 @@
 </template>
 
 <script>
-const Stock = () => import("@/components/stock/StockIndex");
+// const Stock = () => import("@/components/stock/StockIndex");
 import PageHeader from "@/components/PageHeader";
 
 export default {
   name: "Portfolio",
   components: {
     "app-page-header": PageHeader,
-    "app-stock": Stock
+    "app-stock": () => import("@/components/stock/StockIndex")
   },
   data: () => {
     return {
