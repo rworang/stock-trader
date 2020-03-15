@@ -1,20 +1,20 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Stocks.vue";
+import Stocks from "../views/Stocks.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "Stocks",
-    component: Home
+    name: "stocks",
+    component: Stocks
   },
   {
     path: "/portfolio",
-    name: "Portfolio",
+    name: "portfolio",
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Portfolio.vue")
+      import(/* webpackChunkName: "portfolio" */ "../views/Portfolio.vue")
   }
 ];
 

@@ -1,7 +1,10 @@
 <template>
   <div>
     <app-page-header page="stocks" :sort-now="sortNow"></app-page-header>
-    <v-row>
+    <v-row v-if="$store.state.loading">
+      Loading
+    </v-row>
+    <v-row v-else>
       <v-col
         cols="12"
         sm="6"
@@ -30,7 +33,7 @@
   </div>
 </template>
 <script>
-const Stock = () => import("@/components/stock/StockIndex");
+// const Stock = () => import("@/components/stock/StockIndex");
 // import Stock from "@/components/stock/StockIndex";
 import PageHeader from "@/components/PageHeader";
 
@@ -38,7 +41,7 @@ export default {
   name: "Stocks",
   components: {
     "app-page-header": PageHeader,
-    "app-stock": Stock
+    "app-stock": () => import("@/components/stock/StockIndex")
   },
   data: () => {
     return {

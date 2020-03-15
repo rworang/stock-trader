@@ -16,9 +16,7 @@
           style="font-size:3.8rem;line-height:3.5rem;"
         >
           <div>
-            <span title="Stock short name / symbol">{{
-              stock.short_name
-            }}</span>
+            <span :title="stock.full_name">{{ stock.short_name }}</span>
           </div>
           <div class="headline grey--text text--lighten-1">
             <span title="Stock full name"
@@ -289,6 +287,7 @@
         :timeout="4000"
         style="margin-top: 64px;"
         @click="snackbar = false"
+        @click.right.prevent="linkTo('portfolio')"
       >
         <span v-html="snackbarMessage"></span>
       </v-snackbar>
@@ -384,6 +383,10 @@ export default {
   },
 
   methods: {
+    linkTo(name) {
+      this.$router.push({ path: name });
+      this.snackbar = false;
+    },
     onClickOutside() {
       this.stockInfo = false;
     },
@@ -483,7 +486,8 @@ export default {
 .v-card:hover {
   cursor: default;
 }
-.card-hover-dark, .card-hover-light {
+.card-hover-dark,
+.card-hover-light {
   padding: 3px;
 }
 .card-hover-dark:hover {

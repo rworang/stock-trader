@@ -10,7 +10,7 @@ const api_key =
 const state = {
   loading: false,
   indicesId: 2,
-  pageAmount: 30,
+  pageAmount: 16,
   pageList: [],
   pagePrices: [],
   pageProfiles: [],
@@ -151,7 +151,10 @@ const actions = {
 
 const getters = {
   stocks: state => {
-    return state.stocks;
+    return state.stocks.slice(0, state.pageAmount);
+  },
+  pageAmount: state => {
+    return state.pageAmount;
   },
   loading: state => {
     return state.loading;

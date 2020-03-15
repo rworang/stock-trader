@@ -8,21 +8,6 @@
       <v-btn elevation="0" @click.stop="refreshData" class="border-radius-l"
         >Refresh <v-icon small>mdi-refresh</v-icon></v-btn
       >
-      <v-menu transition="fade-transition" offset-y dense>
-        <template v-slot:activator="{ on }">
-          <v-btn v-on="on" elevation="0"> Results: {{ sortAmountMenu }} </v-btn>
-        </template>
-        <v-list>
-          <v-list-item
-            v-for="(item, index) in sortAmount"
-            :key="index"
-            link
-            @click="sortAmountMenu = item"
-          >
-            <v-list-item-title>{{ item }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
 
       <v-menu transition="fade-transition" offset-y dense>
         <template v-slot:activator="{ on }">
@@ -70,9 +55,7 @@ export default {
     return {
       sortOrder: false,
       sortItemsMenu: "name",
-      sortItems: ["name", "price", "change", "percentage"],
-      sortAmountMenu: "30",
-      sortAmount: ["30", "60", "90"]
+      sortItems: ["name", "price", "change", "percentage"]
     };
   },
 

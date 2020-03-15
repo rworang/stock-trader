@@ -1,6 +1,6 @@
 module.exports = {
-  transpileDependencies: ["vuetify"],
   pwa: {
     name: "Stock Trader"
-  }
+  },
+  transpileDependencies: ["vuetify", "vuex-persist"]
 };
