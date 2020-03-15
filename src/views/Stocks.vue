@@ -56,6 +56,11 @@ export default {
       return this.$store.state.pageAmount;
     }
   },
+  watch: {
+    stocks() {
+      // console.log(this.stocks);
+    }
+  },
   mounted() {
     this.sortNow = true;
   },

@@ -14,7 +14,7 @@ const mutations = {
         quantity: quantity,
         bought_at: stockPrice
       });
-      console.log(state.stocks);
+      // console.log(state.stocks);
     }
     state.funds -= stockPrice * quantity;
   },
@@ -45,9 +45,9 @@ const actions = {
 const getters = {
   stockPortfolio: (state, getters) => {
     return state.stocks.map(stock => {
-      console.log(state.stocks);
+      // console.log(state.stocks);
       const record = getters.stocks.find(element => element.id === stock.id);
-      console.log(stock);
+      // console.log(stock);
       return {
         id: stock.id,
         quantity: stock.quantity,

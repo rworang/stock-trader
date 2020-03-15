@@ -112,26 +112,13 @@ export default {
           }
         });
       } else if (v === "name") {
-        this.stocks.sort(function(a, b) {
-          let nameA = a.name.toUpperCase();
-          let nameB = b.name.toUpperCase();
-          if (nameA > nameB) {
-            if (vm.sortOrder) {
-              return 1;
-            } else {
-              return 0;
-            }
-          }
-          if (nameA < nameB) {
-            if (vm.sortOrder) {
-              return 0;
-            } else {
-              return 1;
-            }
-          }
-          return 0;
-        });
+        if (vm.sortOrder) {
+          this.stocks.sort((a, b) => a.name.localeCompare(b.name, "en"));
+        } else {
+          this.stocks.sort((a, b) => b.name.localeCompare(a.name, "en"));
+        }
       }
+      this.$store.dispatch("setStocks", this.stocks);
     }
   }
 };

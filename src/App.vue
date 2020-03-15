@@ -49,7 +49,7 @@
         </v-list>
       </v-navigation-drawer>
 
-      <v-app-bar app>
+      <v-app-bar app dark>
         <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
         <v-toolbar-title class="mr-4">{{ $appName }}</v-toolbar-title>
         <v-btn elevation="0" class="text-capitalize" tile to="/">Stocks</v-btn>
@@ -87,12 +87,12 @@
       </v-app-bar>
 
       <v-content>
-        <v-container>
+        <v-container class="mb-3">
           <router-view></router-view>
         </v-container>
       </v-content>
 
-      <v-footer app absolute>
+      <v-footer app absolute dark>
         <v-row>
           <v-col class="white--text text-center">
             {{ $appName + " &copy; " + $date().format("YYYY") }}
@@ -110,6 +110,7 @@ export default {
   created() {
     // this.$store.dispatch("initStocks");
   },
+  computed: {},
   data: () => ({
     drawer: false,
     dropdown: ["Save Day", "Load Day"]

@@ -65,10 +65,16 @@ const mutations = {
     }
     console.log("Merged responses:", merged);
     state.stocks = merged;
+  },
+  SET_STOCKS(state, payload) {
+    state.stocks = payload;
   }
 };
 
 const actions = {
+  setStocks({ commit }, payload) {
+    commit("SET_STOCKS", payload);
+  },
   async initStocks({ commit, dispatch }) {
     commit("START_LOAD", "getAllStocks");
 
