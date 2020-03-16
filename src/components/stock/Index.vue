@@ -1,5 +1,5 @@
 <template>
-  <v-slide-y-transition origin="center center 0">
+  <v-fade-transition>
     <v-card
       outlined
       @click="cardClick(page)"
@@ -312,7 +312,7 @@
         </v-snackbar>
       </v-container>
     </v-card>
-  </v-slide-y-transition>
+  </v-fade-transition>
 </template>
 
 <script>

@@ -1,8 +1,7 @@
 <template>
-  <div>
+  <v-col>
     <v-row>
       <v-col
-        cols="12"
         sm="6"
         md="6"
         lg="4"
@@ -19,7 +18,7 @@
         >Load more stocks...</v-btn
       >
     </v-row>
-  </div>
+  </v-col>
 </template>
 <script>
 export default {

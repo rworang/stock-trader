@@ -1,34 +1,36 @@
 <template>
-  <v-col class="text-right pt-5">
-    <v-btn elevation="0" @click.stop="refreshData" class="border-radius-l"
-      >Refresh <v-icon small>mdi-refresh</v-icon></v-btn
-    >
+  <v-row>
+    <v-col class="text-right py-0">
+      <v-btn elevation="0" @click.stop="refreshData" class="border-radius-l"
+        >Refresh <v-icon small>mdi-refresh</v-icon></v-btn
+      >
 
-    <v-menu transition="fade-transition" offset-y dense>
-      <template v-slot:activator="{ on }">
-        <v-btn v-on="on" elevation="0"> Sort by: {{ sortItemsMenu }} </v-btn>
-      </template>
-      <v-list>
-        <v-list-item
-          v-for="(item, index) in sortItems"
-          :key="index"
-          link
-          @click="sortItemsFn(item)"
-        >
-          <v-list-item-title>{{ item }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
+      <v-menu transition="fade-transition" offset-y dense>
+        <template v-slot:activator="{ on }">
+          <v-btn v-on="on" elevation="0"> Sort by: {{ sortItemsMenu }} </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in sortItems"
+            :key="index"
+            link
+            @click="sortItemsFn(item)"
+          >
+            <v-list-item-title>{{ item }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
 
-    <v-btn
-      elevation="0"
-      @click="sortBy(sortOrder)"
-      class="px-0 border-radius-r"
-    >
-      <v-icon v-if="!sortOrder">mdi-sort-descending</v-icon>
-      <v-icon v-else>mdi-sort-ascending</v-icon>
-    </v-btn>
-  </v-col>
+      <v-btn
+        elevation="0"
+        @click="sortBy(sortOrder)"
+        class="px-0 border-radius-r"
+      >
+        <v-icon v-if="!sortOrder">mdi-sort-descending</v-icon>
+        <v-icon v-else>mdi-sort-ascending</v-icon>
+      </v-btn>
+    </v-col>
+  </v-row>
 </template>
 <script>
 export default {

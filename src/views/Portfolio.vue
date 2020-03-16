@@ -1,8 +1,7 @@
 <template>
-  <div>
+  <v-col>
     <v-row>
       <v-col
-        cols="12"
         sm="6"
         md="6"
         lg="4"
@@ -16,7 +15,7 @@
         </v-fade-transition>
       </v-col>
     </v-row>
-  </div>
+  </v-col>
 </template>
 
 <script>

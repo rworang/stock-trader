@@ -1,6 +1,7 @@
 <template>
   <v-theme-provider root>
     <v-app>
+      <!--# START: main (left) navigation drawer-->
       <v-navigation-drawer
         v-model="drawer"
         class="grey darken-4"
@@ -10,95 +11,124 @@
         dark
         app
       >
+        <!--## START: drawerItems loop -->
         <v-list
           dense
           class="flex-column py-0"
           height="100%"
           transition="slide-x-transition"
         >
-          <v-list-item @click.stop="mini = !mini">
-            <v-list-item-action>
-              <v-icon v-if="mini">mdi-chevron-double-right</v-icon>
-              <v-icon v-else>mdi-close</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title class="title">
-                {{ $appName }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item link to="/">
-            <v-list-item-action>
-              <v-icon>mdi-cash-multiple</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>Stocks</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item link to="/portfolio">
-            <v-list-item-action>
-              <v-icon>mdi-briefcase</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>Portfolio</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item link>
-            <v-list-item-action>
-              <v-icon>mdi-stop-circle-outline</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>End Day</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-dialog v-model="dialog" persistent max-width="420">
-            <template v-slot:activator="{ on }">
-              <v-list-item link v-on="on">
+          <div v-for="item in drawerItems" :key="item.id">
+            <!--##- check item type 'title', enables menu toggling on item click -->
+            <template v-if="item.type === 'title'">
+              <v-fade-transition>
+                <v-list-item @click.stop="mini = !mini">
+                  <v-list-item-action>
+                    <v-scale-transition>
+                      <v-icon v-if="mini">{{ item.icon }}</v-icon>
+                      <v-icon v-else>mdi-close</v-icon>
+                    </v-scale-transition>
+                  </v-list-item-action>
+                  <v-list-item-content>
+                    <v-list-item-title class="title">
+                      {{ item.value }}
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-fade-transition>
+            </template>
+            <!--##- check item type 'link', drawerItem needs to have 'to' property can be empty -->
+            <template v-if="item.type === 'link'">
+              <v-fade-transition>
+                <v-list-item link :to="item.to" :title="item.value">
+                  <v-list-item-action>
+                    <v-icon>{{ item.icon }}</v-icon>
+                  </v-list-item-action>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ item.value }}</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-fade-transition>
+            </template>
+          </div>
+        </v-list>
+        <!--## END: drawerItems loop -->
+
+        <!--## START: main drawer append (clear cache & theme toggle) -->
+        <template slot="append">
+          <v-list class="py-0">
+            <!--### START: clear local storage link, opens dialog for confirmation -->
+            <v-dialog v-model="dialog" persistent max-width="420">
+              <template v-slot:activator="{ on }">
+                <v-fade-transition>
+                  <v-list-item link v-on="on" title="Clear local storage">
+                    <v-list-item-action>
+                      <v-icon>mdi-alert-circle</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                      <v-list-item-title>Clear local storage</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-fade-transition>
+              </template>
+              <v-card>
+                <v-card-title class="headline pb-2"
+                  >Clear local storage?</v-card-title
+                >
+                <v-card-text class="py-2">
+                  Clearing local storage will result in deletion of all saved
+                  state data, this includes
+                  <strong>portfolio</strong> data.<br /><br />
+                  Pressing "Clear storage" will reload the page.</v-card-text
+                >
+                <v-card-actions class="pt-2">
+                  <v-spacer></v-spacer>
+                  <v-btn text @click="dialog = false">Cancel</v-btn>
+                  <v-btn color="red darken-4" text @click="clearStorage"
+                    >Clear storage</v-btn
+                  >
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+            <!--### END: clear local storage link, opens dialog for confirmation -->
+
+            <!--### START: rapport panel toggler -->
+            <v-fade-transition>
+              <v-list-item @click="rapport = !rapport" title="Toggle rapport panel">
                 <v-list-item-action>
-                  <v-icon>mdi-alert-circle</v-icon>
+                  <v-icon :color="rapport ? 'primary' : ''">
+                    mdi-clipboard-text
+                  </v-icon>
                 </v-list-item-action>
                 <v-list-item-content>
-                  <v-list-item-title>Clear local storage</v-list-item-title>
+                  <v-list-item-title>Toggle rapport panel</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-            </template>
-            <v-card>
-              <v-card-title class="headline pb-2"
-                >Clear local storage?</v-card-title
+            </v-fade-transition>
+            <!--### END: rapport panel toggler -->
+
+            <!--### START: theme toggler -->
+            <v-fade-transition>
+              <v-list-item
+                @click="$vuetify.theme.dark = !$vuetify.theme.dark"
+                title="Toggle theme"
               >
-              <v-card-text class="py-2">
-                Clearing local storage will result in deletion of all saved
-                state data, this includes
-                <strong>portfolio</strong> data.<br /><br />
-                Pressing "Clear storage" will reload the page.</v-card-text
-              >
-              <v-card-actions class="pt-2">
-                <v-spacer></v-spacer>
-                <v-btn color="white darken-3" text @click="dialog = false"
-                  >Cancel</v-btn
-                >
-                <v-btn color="red darken-4" text @click="clearStorage"
-                  >Clear storage</v-btn
-                >
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-        </v-list>
-        <template slot="append">
-          <v-list transition="slide-x-transition" class="py-0">
-            <v-list-item @click="$vuetify.theme.dark = !$vuetify.theme.dark">
-              <v-list-item-action>
-                <v-icon :color="$vuetify.theme.dark ? 'primary' : ''">
-                  mdi-brightness-4
-                </v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title>Light/dark theme</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
+                <v-list-item-action>
+                  <v-icon :color="$vuetify.theme.dark ? 'primary' : ''">
+                    mdi-brightness-4
+                  </v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>Toggle theme</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-fade-transition>
+            <!--### END: theme toggler -->
           </v-list>
         </template>
+        <!--## END: main drawer append (clear cache & theme toggle) -->
       </v-navigation-drawer>
+      <!--# END: main (left) navigation drawer-->
 
       <v-app-bar app dark dense elevation="0" class="grey darken-4">
         <v-fade-transition>
@@ -144,31 +174,63 @@
       </v-navigation-drawer>
 
       <v-content>
-        <v-container class="mb-3">
-          <v-row>
-            <v-col>
-              <v-tabs>
-                <v-tab
-                  v-for="(tab, index) in tabs"
-                  :key="tab.value + index"
-                  elevation="0"
-                  class="text-capitalize"
-                  tile
-                  :to="tab.to"
-                  >{{ tab.value }}</v-tab
+        <v-container fluid class="py-0" style="height:100%;">
+          <v-row style="height:100%;">
+            <v-slide-x-transition>
+              <v-col
+                v-if="mini && rapport"
+                cols="3"
+                class="p-relative"
+                :class="
+                  $vuetify.theme.dark
+                    ? 'border-light-r grey darken-3'
+                    : 'border-dark-r grey lighten-3'
+                "
+              >
+                <div class="p-fixed">
+                  <v-row>
+                    <v-col>
+                      <span class="title">Stocks rapport</span>
+                    </v-col>
+                  </v-row>
+                </div>
+              </v-col>
+            </v-slide-x-transition>
+            <v-fade-transition>
+              <v-col :cols="mini && rapport ? 9 : 12">
+                <v-row
+                  :class="
+                    $vuetify.theme.dark ? 'border-light-b' : 'border-dark-b'
+                  "
+                  class="mb-3"
                 >
-              </v-tabs>
-            </v-col>
-            <v-scale-transition origin="center center 0">
-              <app-page-header
-                v-if="$root._route.name === 'stocks'"
-                :page="$root._route.name"
-                :sort-now="sortNow"
-              ></app-page-header>
-            </v-scale-transition>
+                  <v-col sm="12" md="6" class="py-0">
+                    <v-tabs>
+                      <v-tab
+                        v-for="(tab, index) in tabs"
+                        :key="tab.value + index"
+                        elevation="0"
+                        class="text-capitalize"
+                        tile
+                        :to="tab.to"
+                        >{{ tab.value }}</v-tab
+                      >
+                    </v-tabs>
+                  </v-col>
+                  <v-col class="py-0">
+                    <v-scale-transition origin="center center 0">
+                      <app-page-header
+                        v-if="$root._route.name === 'stocks'"
+                        :page="$root._route.name"
+                        :sort-now="sortNow"
+                      ></app-page-header>
+                    </v-scale-transition>
+                  </v-col>
+                </v-row>
+                <router-view></router-view>
+              </v-col>
+            </v-fade-transition>
           </v-row>
-
-          <router-view></router-view>
         </v-container>
       </v-content>
 
@@ -229,10 +291,40 @@ export default {
     sortNow: false,
     hidden: false,
     dialog: false,
+    rapport: false,
     drawer: false,
     mini: true,
     drawerPortfolio: false,
-    dropdown: ["Save Day", "Load Day"]
+    dropdown: ["Save Day", "Load Day"],
+    drawerItems: [
+      {
+        id: 0,
+        type: "title",
+        value: "Stock Trader",
+        icon: "mdi-chevron-double-right"
+      },
+      {
+        id: 1,
+        type: "link",
+        value: "Stocks",
+        icon: "mdi-cash-multiple",
+        to: "/"
+      },
+      {
+        id: 2,
+        type: "link",
+        value: "Portfolio",
+        icon: "mdi-briefcase",
+        to: "/portfolio"
+      },
+      {
+        id: 3,
+        type: "link",
+        value: "End Day",
+        icon: "mdi-stop-circle-outline",
+        to: ""
+      }
+    ]
   }),
   methods: {
     clearStorage() {
@@ -256,6 +348,22 @@ export default {
 .currency:before {
   content: "\0024";
   color: grey;
+}
+
+.p-relative {
+  position: relative;
+}
+
+.p-sticky {
+  position: sticky;
+}
+
+.p-fixed {
+  position: fixed;
+}
+
+.p-absolute {
+  position: absolute;
 }
 
 .pointer {
