@@ -1,7 +1,10 @@
 <template>
   <v-row>
     <v-col class="text-right py-0">
-      <v-btn elevation="0" @click.stop="refreshData" class="border-radius-l"
+      <!--      <v-btn elevation="0" @click.stop="refreshData" class="border-radius-l"-->
+      <!--      >Refresh <v-icon small>mdi-refresh</v-icon></v-btn-->
+      <!--      >-->
+      <v-btn elevation="0" class="border-radius-l"
         >Refresh <v-icon small>mdi-refresh</v-icon></v-btn
       >
 
