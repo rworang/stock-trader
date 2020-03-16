@@ -3,12 +3,10 @@
     <v-row>
       <v-col
         cols="12"
-        sm="8"
+        sm="6"
         md="6"
         lg="4"
         xl="3"
-        offset-sm="2"
-        offset-md="0"
         v-for="stock in stockPortfolio"
         :key="stock.stock_id"
         class="pa-0"

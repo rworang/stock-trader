@@ -7,8 +7,6 @@
         md="6"
         lg="4"
         xl="3"
-        offset-sm="2"
-        offset-md="0"
         v-for="stock in stocks"
         :key="stock.id"
         class="pa-0"
@@ -16,8 +14,8 @@
         <app-stock :stock="stock" page="stocks"></app-stock>
       </v-col>
     </v-row>
-    <v-row v-if="!allLoaded">
-      <v-btn block text @click="$store.dispatch('increasePageAmount')"
+    <v-row v-if="!allLoaded" class="mt-4">
+      <v-btn block x-large text @click="$store.dispatch('increasePageAmount')"
         >Load more stocks...</v-btn
       >
     </v-row>

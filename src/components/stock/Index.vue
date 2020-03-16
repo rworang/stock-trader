@@ -11,6 +11,7 @@
       class="ma-2"
     >
       <v-container fluid class="pb-0">
+        <!-- stock-header wrapping element is v-row -->
         <stock-header :stock="stockHeader"></stock-header>
 
         <v-row v-if="page === 'stocks'">

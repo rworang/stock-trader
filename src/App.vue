@@ -1,16 +1,30 @@
 <template>
   <v-theme-provider root>
     <v-app>
-      <v-navigation-drawer v-model="drawer" app temporary>
-        <v-list dense class="flex-column" height="100%">
-          <v-list-item>
+      <v-navigation-drawer
+        v-model="drawer"
+        class="grey darken-4"
+        :mini-variant="mini"
+        permanent
+        fixed
+        dark
+        app
+      >
+        <v-list
+          dense
+          class="flex-column py-0"
+          height="100%"
+          transition="slide-x-transition"
+        >
+          <v-list-item @click.stop="mini = !mini">
+            <v-list-item-action>
+              <v-icon v-if="mini">mdi-chevron-double-right</v-icon>
+              <v-icon v-else>mdi-close</v-icon>
+            </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title class="title">
                 {{ $appName }}
               </v-list-item-title>
-              <v-list-item-subtitle class="font-italic">
-                Invest in a new future!
-              </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
           <v-list-item link to="/">
@@ -71,46 +85,31 @@
           </v-dialog>
         </v-list>
         <template slot="append">
-          <v-list>
-            <v-list-item>
-              <v-switch
-                v-model="$vuetify.theme.dark"
-                label="Light/dark theme"
-                hide-details
-                dense
-                inset
-              ></v-switch>
+          <v-list transition="slide-x-transition" class="py-0">
+            <v-list-item @click="$vuetify.theme.dark = !$vuetify.theme.dark">
+              <v-list-item-action>
+                <v-icon :color="$vuetify.theme.dark ? 'primary' : ''">
+                  mdi-brightness-4
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>Light/dark theme</v-list-item-title>
+              </v-list-item-content>
             </v-list-item>
           </v-list>
         </template>
       </v-navigation-drawer>
 
-      <v-app-bar app dark dense elevation="0">
-        <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-        <v-toolbar-title class="mr-4">{{ $appName }}</v-toolbar-title>
+      <v-app-bar app dark dense elevation="0" class="grey darken-4">
+        <v-fade-transition>
+          <v-toolbar-title
+            class="title pointer"
+            @click.stop="mini = !mini"
+            v-if="mini"
+            >{{ $appName }}
+          </v-toolbar-title>
+        </v-fade-transition>
         <v-spacer></v-spacer>
-        <!--        <v-btn elevation="0" class="text-capitalize" tile>End Day</v-btn>-->
-        <!--        <v-menu offset-y left>-->
-        <!--          <template v-slot:activator="{ on }">-->
-        <!--            <v-btn elevation="0" v-on="on" class="text-capitalize">-->
-        <!--              Save &amp; Load-->
-        <!--            </v-btn>-->
-        <!--          </template>-->
-        <!--          <v-list dense>-->
-        <!--            <v-list-item @click="saveDay" class="text-capitalize">-->
-        <!--              <v-list-item-icon class="mr-4">-->
-        <!--                <v-icon>mdi-content-save</v-icon>-->
-        <!--              </v-list-item-icon>-->
-        <!--              <v-list-item-title>Save Day</v-list-item-title>-->
-        <!--            </v-list-item>-->
-        <!--            <v-list-item @click="loadDay">-->
-        <!--              <v-list-item-icon class="mr-4">-->
-        <!--                <v-icon>mdi-download</v-icon>-->
-        <!--              </v-list-item-icon>-->
-        <!--              <v-list-item-title>Load Day</v-list-item-title>-->
-        <!--            </v-list-item>-->
-        <!--          </v-list>-->
-        <!--        </v-menu>-->
         <v-btn
           elevation="0"
           class="text-capitalize"
@@ -126,15 +125,20 @@
       <v-navigation-drawer
         v-model="drawerPortfolio"
         class="grey darken-4"
-        width="380"
-        app
-        dark
+        width="100%"
+        temporary
         right
-        absolute
+        dark
+        app
       >
         <v-list>
-          <v-list-item>
-            Hello
+          <v-list-item @click.stop="drawerPortfolio = !drawerPortfolio">
+            <v-list-item-icon>
+              <v-icon>mdi-close</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>
+              Close
+            </v-list-item-title>
           </v-list-item>
         </v-list>
       </v-navigation-drawer>
@@ -168,7 +172,7 @@
         </v-container>
       </v-content>
 
-      <v-footer app absolute dark>
+      <v-footer dark>
         <v-row>
           <v-col class="white--text text-center">
             {{ $appName + " &copy; " + $date().format("YYYY") }}
@@ -178,7 +182,7 @@
 
       <v-fab-transition>
         <v-btn
-          v-show="!drawerPortfolio"
+          v-if="!drawerPortfolio"
           title="Go to top"
           fixed
           bottom
@@ -205,6 +209,11 @@ export default {
     // this.$store.dispatch("initStocks");
     // console.log(this.$root._route.name);
   },
+  watch: {
+    $route() {
+      this.mini = true;
+    }
+  },
   computed: {},
   data: () => ({
     tabs: [
@@ -221,6 +230,7 @@ export default {
     hidden: false,
     dialog: false,
     drawer: false,
+    mini: true,
     drawerPortfolio: false,
     dropdown: ["Save Day", "Load Day"]
   }),

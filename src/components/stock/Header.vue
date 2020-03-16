@@ -1,40 +1,27 @@
 <template>
   <v-row>
-    <v-col
-      cols="7"
-      class="font-weight-bold py-0 pr-0"
-      style="font-size:3.8rem;line-height:3.5rem;"
-    >
-      <div>
-        <span :title="stock.full_name">{{ stock.short_name }}</span>
-      </div>
-      <div class="headline grey--text text--lighten-1">
-        <span title="Stock full name"
-          >{{ stock.name.replace(/[\u{0080}-\u{FFFF}]/gu, "") }}
-        </span>
+    <v-col cols="7" class="stock-short-name py-0 pr-0">
+      <div :title="stock.full_name">{{ stock.short_name }}</div>
+      <div title="Stock full name" class="headline grey--text text--lighten-1">
+        {{ stock.name.replace(/[\u{0080}-\u{FFFF}]/gu, "") }}
       </div>
     </v-col>
     <v-col
       cols="5"
-      class="text-right py-0 pl-0 border-radius-l"
+      class="text-right pa-0 pr-3 border-radius-l"
       :style="'background: ' + ($vuetify.theme.dark ? '#373740' : '#fff') + ';'"
     >
       <div class="currency display-1" title="Price in Dollars">
         {{ stock.price.toLocaleString() }}
       </div>
-      <div v-if="page === 'stocks'">
-        <span class="subtitle-2" title="Price low">
-          <v-icon x-small color="red">mdi-arrow-down</v-icon>
-          {{ stock.low.toLocaleString() }}
-        </span>
-        <span class="subtitle-2" title="Price high">
-          <v-icon x-small color="green">mdi-arrow-up</v-icon>
-          {{ stock.high.toLocaleString() }}
-        </span>
-      </div>
-      <div v-else @click="quantity = ownedStock(stock.id)">
-        Owned amount: {{ ownedStock(stock.id) }}
-      </div>
+      <span class="subtitle-2" title="Price low">
+        <v-icon x-small color="red">mdi-arrow-down</v-icon>
+        {{ stock.low.toLocaleString() }}
+      </span>
+      <span class="subtitle-2" title="Price high">
+        <v-icon x-small color="green">mdi-arrow-up</v-icon>
+        {{ stock.high.toLocaleString() }}
+      </span>
       <div class="body-2">
         change:
         <span class="font-weight-bold pr-2" :class="changeColor" title="Change">
@@ -102,3 +89,11 @@ export default {
   }
 };
 </script>
+
+<style scoped lang="scss">
+.stock-short-name {
+  font-weight: bold;
+  font-size: 3.8rem;
+  line-height: 3.5rem;
+}
+</style>
