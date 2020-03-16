@@ -5,14 +5,16 @@ import VuexPersistence from "vuex-persist";
 import fcsapi from "./api/fcsapi";
 
 import theme from "./modules/theme";
-// import stocks from "./modules/stocks";
 import portfolio from "./modules/portfolio";
 
 Vue.use(Vuex);
 
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
-  reducer: (state) => ({ portfolio: state.portfolio })
+  reducer: state => ({
+    portfolio: state.portfolio,
+    theme: state.theme
+  })
 });
 
 // console.log(vuexLocal.storage);

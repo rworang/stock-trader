@@ -1,25 +1,23 @@
-// import vue from "vue";
-
 const state = {
-  theme: true
+  dark: true
 };
 
 const mutations = {
-  TOGGLE_THEME(state, bool) {
-    console.log(state, bool);
-    state.theme = bool;
+  TOGGLE_THEME(state, payload) {
+    state.dark = payload;
+    console.log("TOGGLE_THEME:", state.dark);
   }
 };
 
 const actions = {
-  toggleTheme: ({ commit }, bool) => {
-    commit("TOGGLE_THEME", bool);
+  toggleTheme: ({ commit }, payload) => {
+    commit("TOGGLE_THEME", payload);
   }
 };
 
 const getters = {
-  theme() {
-    return state.theme;
+  dark() {
+    return state.dark;
   }
 };
 

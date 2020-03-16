@@ -2,11 +2,11 @@ import Vue from "vue";
 import App from "./App.vue";
 import "./registerServiceWorker";
 
-import router from "./router";
-import store from "./store";
-
 import vuetify from "./plugins/vuetify";
 import VueDayJs from "vue-dayjs-plugin";
+
+import router from "./router";
+import store from "./store";
 
 import vco from "v-click-outside";
 import VueScrollTo from "vue-scrollto";

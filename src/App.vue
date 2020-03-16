@@ -94,7 +94,10 @@
 
             <!--### START: rapport panel toggler -->
             <v-fade-transition>
-              <v-list-item @click="rapport = !rapport" title="Toggle rapport panel">
+              <v-list-item
+                @click="rapport = !rapport"
+                title="Toggle rapport panel"
+              >
                 <v-list-item-action>
                   <v-icon :color="rapport ? 'primary' : ''">
                     mdi-clipboard-text
@@ -110,11 +113,11 @@
             <!--### START: theme toggler -->
             <v-fade-transition>
               <v-list-item
-                @click="$vuetify.theme.dark = !$vuetify.theme.dark"
+                @click="$vuetify.theme.isDark = !$vuetify.theme.isDark"
                 title="Toggle theme"
               >
                 <v-list-item-action>
-                  <v-icon :color="$vuetify.theme.dark ? 'primary' : ''">
+                  <v-icon :color="vuetifyTheme ? 'primary' : ''">
                     mdi-brightness-4
                   </v-icon>
                 </v-list-item-action>
@@ -204,7 +207,7 @@
                   "
                   class="mb-3"
                 >
-                  <v-col sm="12" md="6" class="py-0">
+                  <v-col xs="12" md="6" class="py-0">
                     <v-tabs>
                       <v-tab
                         v-for="(tab, index) in tabs"
@@ -250,6 +253,7 @@
           bottom
           right
           fab
+          dark
           v-scroll-to="'#app'"
         >
           <v-icon>mdi-arrow-up</v-icon>
@@ -267,16 +271,36 @@ export default {
   components: {
     "app-page-header": PageHeader
   },
+  beforeMount() {
+    console.log(
+      "BEFORE_MOUNT: ",
+      JSON.parse(window.localStorage.vuex).theme.dark
+    );
+    console.log(this.$vuetify.theme.isDark);
+    if (this.$vuetify.theme.isDark) {
+      this.$vuetify.theme.isDark = JSON.parse(
+        window.localStorage.vuex
+      ).theme.dark;
+    }
+    console.log(this.$vuetify.theme.isDark);
+  },
   created() {
     // this.$store.dispatch("initStocks");
     // console.log(this.$root._route.name);
   },
+  computed: {
+    vuetifyTheme() {
+      return this.$vuetify.theme.isDark;
+    }
+  },
   watch: {
     $route() {
       this.mini = true;
+    },
+    vuetifyTheme() {
+      this.$store.dispatch("toggleTheme", this.$vuetify.theme.isDark);
     }
   },
-  computed: {},
   data: () => ({
     tabs: [
       {
