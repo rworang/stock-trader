@@ -1,3 +1,5 @@
+import stocks from "@/data/stocks";
+
 const state = {
   funds: 2500000,
   stocks: [],
@@ -63,11 +65,10 @@ const actions = {
 };
 
 const getters = {
-  stockPortfolio: (state, getters) => {
+  stockPortfolio: state => {
     return state.stocks.map(stock => {
       // console.log(state.stocks);
-      const record = getters.stocks.find(element => element.id === stock.id);
-      // console.log(stock);
+      const record = stocks.find(element => element.id === stock.id);
       return {
         id: stock.id,
         quantity: stock.quantity,

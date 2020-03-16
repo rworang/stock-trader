@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!--    <app-page-header page="portfolio" :sort-now="sortNow"></app-page-header>-->
     <v-row>
       <v-col
         cols="12"
@@ -10,7 +9,7 @@
         xl="3"
         offset-sm="2"
         offset-md="0"
-        v-for="stock in stocks"
+        v-for="stock in stockPortfolio"
         :key="stock.stock_id"
         class="pa-0"
       >
@@ -26,7 +25,7 @@
 export default {
   name: "Portfolio",
   components: {
-    "app-stock": () => import("@/components/stock/StockIndex")
+    "app-stock": () => import("@/components/stock/Index")
   },
   data: () => {
     return {
@@ -34,7 +33,7 @@ export default {
     };
   },
   computed: {
-    stocks() {
+    stockPortfolio() {
       return this.$store.getters.stockPortfolio;
     },
     pageAmount() {
@@ -45,7 +44,6 @@ export default {
     }
   },
   watch: {
-    stocks() {},
     pageAmount() {
       if (this.$store.getters.pageAmount >= this.stocksLength) {
         this.allLoaded = true;

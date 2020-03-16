@@ -144,22 +144,24 @@
           <v-row>
             <v-col>
               <v-tabs>
-                <v-tab elevation="0" class="text-capitalize" tile to="/"
-                  >Stocks</v-tab
-                >
                 <v-tab
+                  v-for="(tab, index) in tabs"
+                  :key="tab.value + index"
                   elevation="0"
                   class="text-capitalize"
                   tile
-                  to="/portfolio"
-                  >Portfolio</v-tab
+                  :to="tab.to"
+                  >{{ tab.value }}</v-tab
                 >
               </v-tabs>
             </v-col>
-            <app-page-header
-              page="stocks"
-              :sort-now="sortNow"
-            ></app-page-header>
+            <v-scale-transition origin="center center 0">
+              <app-page-header
+                v-if="$root._route.name === 'stocks'"
+                :page="$root._route.name"
+                :sort-now="sortNow"
+              ></app-page-header>
+            </v-scale-transition>
           </v-row>
 
           <router-view></router-view>
@@ -201,9 +203,20 @@ export default {
   },
   created() {
     // this.$store.dispatch("initStocks");
+    // console.log(this.$root._route.name);
   },
   computed: {},
   data: () => ({
+    tabs: [
+      {
+        value: "stocks",
+        to: "/"
+      },
+      {
+        value: "portfolio",
+        to: "/portfolio"
+      }
+    ],
     sortNow: false,
     hidden: false,
     dialog: false,

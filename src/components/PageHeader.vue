@@ -51,11 +51,7 @@ export default {
 
   computed: {
     stocks() {
-      if (this.page === "portfolio") {
-        return this.$store.getters.stockPortfolio;
-      } else {
-        return this.$store.getters.stocks;
-      }
+      return this.$store.getters.stocks;
     }
   },
 

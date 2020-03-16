@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!--    <app-page-header page="stocks" :sort-now="sortNow"></app-page-header>-->
     <v-row>
       <v-col
         cols="12"
@@ -14,9 +13,7 @@
         :key="stock.id"
         class="pa-0"
       >
-        <v-fade-transition>
-          <app-stock :stock="stock" page="stocks"></app-stock>
-        </v-fade-transition>
+        <app-stock :stock="stock" page="stocks"></app-stock>
       </v-col>
     </v-row>
     <v-row v-if="!allLoaded">
@@ -30,7 +27,7 @@
 export default {
   name: "Stocks",
   components: {
-    "app-stock": () => import("@/components/stock/StockIndex")
+    "app-stock": () => import("@/components/stock/Index")
   },
   data: () => {
     return {
