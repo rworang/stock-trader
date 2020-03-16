@@ -2,10 +2,11 @@
   <v-col>
     <v-row>
       <v-col
-        sm="6"
-        md="6"
+        cols="12"
+        :sm="rapport ? 12 : 6"
+        :md="rapport ? 6 : 4"
         lg="4"
-        xl="3"
+        :xl="rapport ? 4 : 3"
         v-for="stock in stockPortfolio"
         :key="stock.stock_id"
         class="pa-0"
@@ -23,6 +24,12 @@ export default {
   name: "Portfolio",
   components: {
     "app-stock": () => import("@/components/stock/Index")
+  },
+  props: {
+    rapport: {
+      type: Boolean,
+      default: false
+    }
   },
   data: () => {
     return {

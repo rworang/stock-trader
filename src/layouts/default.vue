@@ -3,6 +3,7 @@
     <v-app>
       <!--# START: main (left) navigation drawer-->
       <v-navigation-drawer
+        v-model="drawer"
         class="grey darken-4"
         :mini-variant="mini"
         permanent
@@ -136,7 +137,6 @@
       </v-navigation-drawer>
       <!--# END: main (left) navigation drawer-->
 
-      <!--      <app-bar :rapport="rapport" :mini="mini" />-->
       <v-app-bar app dark dense elevation="0" class="grey darken-4">
         <v-fade-transition>
           <v-toolbar-title
@@ -153,7 +153,8 @@
           tile
           @click.stop="
             () => {
-              rapport = !rapport ? (mini = true) : (mini = false);
+              rapport = !rapport;
+              mini = true;
             }
           "
         >
@@ -162,6 +163,27 @@
           }}</span>
         </v-btn>
       </v-app-bar>
+
+      <v-navigation-drawer
+        v-model="drawerPortfolio"
+        class="grey darken-4"
+        width="100%"
+        temporary
+        right
+        dark
+        app
+      >
+        <v-list>
+          <v-list-item @click.stop="drawerPortfolio = !drawerPortfolio">
+            <v-list-item-icon>
+              <v-icon>mdi-close</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>
+              Close
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-navigation-drawer>
 
       <v-content>
         <v-container fluid class="py-0" style="height:100%;">
@@ -192,12 +214,13 @@
                       <app-page-header
                         v-if="$root._route.name === 'stocks'"
                         :page="$root._route.name"
-                        :rapport="rapport.get"
+                        :sort-now="sortNow"
+                        :rapport="rapport"
                       ></app-page-header>
                     </v-scale-transition>
                   </v-col>
                 </v-row>
-                <router-view :rapport="rapport.get"></router-view>
+                <router-view :rapport="rapport"></router-view>
               </v-col>
             </v-slide-x-transition>
             <v-col cols="3" class="p-relative">
@@ -205,6 +228,7 @@
                 <v-navigation-drawer
                   v-if="mini && rapport"
                   :class="$vuetify.theme.dark ? 'dark-2' : 'grey lighten-3'"
+                  v-model="rapport"
                   width="100%"
                   absolute
                   permanent
@@ -213,48 +237,31 @@
                   <template v-slot:prepend>
                     <v-list-item two-line>
                       <v-list-item-avatar>
-                        <v-img
-                          aspect-ratio="1"
-                          class="grey lighten-2"
-                          max-height="40"
-                        >
-                          <template v-slot:placeholder>
-                            <v-row
-                              class="fill-height ma-0"
-                              align="center"
-                              justify="center"
-                            >
-                              <v-icon small color="grey">mdi-image</v-icon>
-                            </v-row>
-                          </template>
-                        </v-img>
+                        <img
+                          src="https://randomuser.me/api/portraits/women/81.jpg"
+                        />
                       </v-list-item-avatar>
 
                       <v-list-item-content>
-                        <v-list-item-title>John Doe</v-list-item-title>
-                        <v-list-item-subtitle
-                          >
-                          <span class="currency">{{
-                            $store.getters.funds.toLocaleString()
-                          }}</span></v-list-item-subtitle
-                        >
+                        <v-list-item-title>Jane Smith</v-list-item-title>
+                        <v-list-item-subtitle>Logged In</v-list-item-subtitle>
                       </v-list-item-content>
                     </v-list-item>
                   </template>
 
                   <v-divider></v-divider>
 
-                  <!--                  <v-list dense>-->
-                  <!--                    <v-list-item v-for="item in items" :key="item.title">-->
-                  <!--                      <v-list-item-icon>-->
-                  <!--                        <v-icon>{{ item.icon }}</v-icon>-->
-                  <!--                      </v-list-item-icon>-->
+                  <v-list dense>
+                    <v-list-item v-for="item in items" :key="item.title">
+                      <v-list-item-icon>
+                        <v-icon>{{ item.icon }}</v-icon>
+                      </v-list-item-icon>
 
-                  <!--                      <v-list-item-content>-->
-                  <!--                        <v-list-item-title>{{ item.title }}</v-list-item-title>-->
-                  <!--                      </v-list-item-content>-->
-                  <!--                    </v-list-item>-->
-                  <!--                  </v-list>-->
+                      <v-list-item-content>
+                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
                 </v-navigation-drawer>
               </v-slide-x-reverse-transition>
             </v-col>
@@ -272,6 +279,7 @@
 
       <v-fab-transition>
         <v-btn
+          v-if="!drawerPortfolio"
           title="Go to top"
           fixed
           bottom
@@ -288,26 +296,35 @@
 </template>
 
 <script>
-// import AppBar from "@/components/app/AppBar";
 import PageHeader from "@/components/PageHeader";
 
 export default {
-  name: "App",
+  name: "DefaultLayout",
+
   components: {
-    // "app-bar": AppBar,
     "app-page-header": PageHeader
   },
   beforeMount() {
+    console.log(
+      "BEFORE_MOUNT: ",
+      JSON.parse(window.localStorage.vuex).theme.dark
+    );
+    console.log(this.$vuetify.theme.isDark);
     if (this.$vuetify.theme.isDark) {
       this.$vuetify.theme.isDark = JSON.parse(
         window.localStorage.vuex
       ).theme.dark;
     }
-    // console.log(this.$vuetify.theme.isDark);
+    console.log(this.$vuetify.theme.isDark);
   },
   created() {
     // this.$store.dispatch("initStocks");
     // console.log(this.$root._route.name);
+  },
+  computed: {
+    vuetifyTheme() {
+      return this.$vuetify.theme.isDark;
+    }
   },
   watch: {
     $route() {
@@ -315,20 +332,6 @@ export default {
     },
     vuetifyTheme() {
       this.$store.dispatch("toggleTheme", this.$vuetify.theme.isDark);
-    }
-  },
-  computed: {
-    rapport: {
-      get() {
-        console.log(this.$store.getters.rapport);
-        return this.$store.getters.rapport;
-      },
-      set() {
-        this.$store.dispatch("toggleRapport");
-      }
-    },
-    vuetifyTheme() {
-      return this.$vuetify.theme.isDark;
     }
   },
   data: () => ({
@@ -342,8 +345,13 @@ export default {
         to: "/portfolio"
       }
     ],
+    sortNow: false,
+    hidden: false,
     dialog: false,
+    rapport: false,
+    drawer: false,
     mini: true,
+    drawerPortfolio: false,
     dropdown: ["Save Day", "Load Day"],
     drawerItems: [
       {

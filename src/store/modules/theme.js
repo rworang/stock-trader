@@ -5,7 +5,7 @@ const state = {
 const mutations = {
   TOGGLE_THEME(state, payload) {
     state.dark = payload;
-    console.log("TOGGLE_THEME:", state.dark);
+    // console.log("TOGGLE_THEME:", state.dark);
   }
 };
 

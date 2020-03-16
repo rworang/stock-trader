@@ -4,6 +4,7 @@ import VuexPersistence from "vuex-persist";
 
 import fcsapi from "./api/fcsapi";
 
+import app from "./modules/app";
 import theme from "./modules/theme";
 import portfolio from "./modules/portfolio";
 
@@ -21,6 +22,7 @@ const vuexLocal = new VuexPersistence({
 
 export default new Vuex.Store({
   modules: {
+    app,
     theme,
     portfolio,
     fcsapi

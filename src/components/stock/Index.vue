@@ -7,8 +7,7 @@
       @mouseenter="elevation = 5"
       @mouseleave="elevation = 1"
       v-click-outside="onClickOutside"
-      :class="$vuetify.theme.dark ? 'card-hover-dark' : 'card-hover-light'"
-      class="ma-2"
+      class="card-hover ma-2"
     >
       <v-container fluid class="pb-0">
         <!-- stock-header wrapping element is v-row -->
@@ -556,16 +555,16 @@ export default {
 .v-card:hover {
   cursor: default;
 }
-.card-hover-dark,
+.card-hover,
 .card-hover-light {
   padding: 3px;
 }
-.card-hover-dark:hover {
+.card-hover:hover {
   border: solid 4px #1eb980;
   padding: 0;
 }
-.card-hover-light:hover {
-  border: solid 4px #1976d2;
-  padding: 0;
-}
+/*.card-hover-light:hover {*/
+/*  border: solid 4px #1976d2;*/
+/*  padding: 0;*/
+/*}*/
 </style>

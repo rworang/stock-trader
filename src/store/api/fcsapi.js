@@ -10,7 +10,7 @@ const api_key =
 const state = {
   loading: false,
   indicesId: 2,
-  pageAmount: 16,
+  pageAmount: 15,
   pageList: [],
   pagePrices: [],
   pageProfiles: [],
@@ -82,7 +82,7 @@ const mutations = {
     // console.log(state.stocks);
   },
   INCREASE_PAGE_AMOUNT(state) {
-    state.pageAmount = state.pageAmount + 16;
+    state.pageAmount = state.pageAmount + 15;
     // console.log(state.pageAmount);
   },
   SET_PAGE_AMOUNT(state, payload) {
@@ -92,7 +92,7 @@ const mutations = {
 
 const actions = {
   increasePageAmount({ commit, state }) {
-    if (state.pageAmount + 16 < stocks.length) {
+    if (state.pageAmount + 15 < stocks.length) {
       commit("INCREASE_PAGE_AMOUNT");
       commit("SET_STOCKS");
     } else {
