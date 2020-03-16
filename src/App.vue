@@ -37,7 +37,6 @@
               <v-list-item-title>End Day</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-
           <v-dialog v-model="dialog" persistent max-width="420">
             <template v-slot:activator="{ on }">
               <v-list-item link v-on="on">
@@ -70,57 +69,99 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-          <v-list-item>
-            <v-switch
-              v-model="$vuetify.theme.dark"
-              label="Light/dark theme"
-              hide-details
-              dense
-              inset
-            ></v-switch>
-          </v-list-item>
         </v-list>
-      </v-navigation-drawer>
-
-      <v-app-bar app dark>
-        <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-        <v-toolbar-title class="mr-4">{{ $appName }}</v-toolbar-title>
-        <v-btn elevation="0" class="text-capitalize" tile to="/">Stocks</v-btn>
-        <v-btn elevation="0" class="text-capitalize" tile to="/portfolio"
-          >Portfolio</v-btn
-        >
-        <v-spacer></v-spacer>
-        <v-btn elevation="0" class="text-capitalize" tile>End Day</v-btn>
-        <v-menu offset-y left>
-          <template v-slot:activator="{ on }">
-            <v-btn elevation="0" v-on="on" class="text-capitalize">
-              Save &amp; Load
-            </v-btn>
-          </template>
-          <v-list dense>
-            <v-list-item @click="saveDay" class="text-capitalize">
-              <v-list-item-icon class="mr-4">
-                <v-icon>mdi-content-save</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>Save Day</v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="loadDay">
-              <v-list-item-icon class="mr-4">
-                <v-icon>mdi-download</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>Load Day</v-list-item-title>
+        <template slot="append">
+          <v-list>
+            <v-list-item>
+              <v-switch
+                v-model="$vuetify.theme.dark"
+                label="Light/dark theme"
+                hide-details
+                dense
+                inset
+              ></v-switch>
             </v-list-item>
           </v-list>
-        </v-menu>
-        <v-btn elevation="0" class="text-capitalize" tile>
+        </template>
+      </v-navigation-drawer>
+
+      <v-app-bar app dark dense elevation="0">
+        <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+        <v-toolbar-title class="mr-4">{{ $appName }}</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <!--        <v-btn elevation="0" class="text-capitalize" tile>End Day</v-btn>-->
+        <!--        <v-menu offset-y left>-->
+        <!--          <template v-slot:activator="{ on }">-->
+        <!--            <v-btn elevation="0" v-on="on" class="text-capitalize">-->
+        <!--              Save &amp; Load-->
+        <!--            </v-btn>-->
+        <!--          </template>-->
+        <!--          <v-list dense>-->
+        <!--            <v-list-item @click="saveDay" class="text-capitalize">-->
+        <!--              <v-list-item-icon class="mr-4">-->
+        <!--                <v-icon>mdi-content-save</v-icon>-->
+        <!--              </v-list-item-icon>-->
+        <!--              <v-list-item-title>Save Day</v-list-item-title>-->
+        <!--            </v-list-item>-->
+        <!--            <v-list-item @click="loadDay">-->
+        <!--              <v-list-item-icon class="mr-4">-->
+        <!--                <v-icon>mdi-download</v-icon>-->
+        <!--              </v-list-item-icon>-->
+        <!--              <v-list-item-title>Load Day</v-list-item-title>-->
+        <!--            </v-list-item>-->
+        <!--          </v-list>-->
+        <!--        </v-menu>-->
+        <v-btn
+          elevation="0"
+          class="text-capitalize"
+          tile
+          @click.stop="drawerPortfolio = !drawerPortfolio"
+        >
           <span class="currency">{{
             $store.getters.funds.toLocaleString()
           }}</span>
         </v-btn>
       </v-app-bar>
 
+      <v-navigation-drawer
+        v-model="drawerPortfolio"
+        class="grey darken-4"
+        width="380"
+        app
+        dark
+        right
+        absolute
+      >
+        <v-list>
+          <v-list-item>
+            Hello
+          </v-list-item>
+        </v-list>
+      </v-navigation-drawer>
+
       <v-content>
         <v-container class="mb-3">
+          <v-row>
+            <v-col>
+              <v-tabs>
+                <v-tab elevation="0" class="text-capitalize" tile to="/"
+                  >Stocks</v-tab
+                >
+                <v-tab
+                  elevation="0"
+                  class="text-capitalize"
+                  tile
+                  to="/portfolio"
+                  >Portfolio</v-tab
+                >
+              </v-tabs>
+            </v-col>
+            <app-page-header
+              page="stocks"
+              :sort-now="sortNow"
+            ></app-page-header>
+          </v-row>
+
           <router-view></router-view>
         </v-container>
       </v-content>
@@ -132,21 +173,45 @@
           </v-col>
         </v-row>
       </v-footer>
+
+      <v-fab-transition>
+        <v-btn
+          v-show="!drawerPortfolio"
+          title="Go to top"
+          fixed
+          bottom
+          right
+          fab
+          v-scroll-to="'#app'"
+        >
+          <v-icon>mdi-arrow-up</v-icon>
+        </v-btn>
+      </v-fab-transition>
     </v-app>
   </v-theme-provider>
 </template>
 
 <script>
+import PageHeader from "@/components/PageHeader";
+
 export default {
   name: "App",
-  components: {},
+  components: {
+    "app-page-header": PageHeader
+  },
   created() {
     // this.$store.dispatch("initStocks");
+    let boolean = true;
+    let value = "name";
+    this.$store.dispatch("sortStocks", { boolean, value });
   },
   computed: {},
   data: () => ({
+    sortNow: false,
+    hidden: false,
     dialog: false,
     drawer: false,
+    drawerPortfolio: false,
     dropdown: ["Save Day", "Load Day"]
   }),
   methods: {

@@ -2,6 +2,10 @@ import Vue from "vue";
 import Vuetify from "vuetify/lib";
 import { preset } from "vue-cli-plugin-vuetify-preset-rally/preset";
 
-Vue.use(Vuetify);
+Vue.use(Vuetify, {
+  options: {
+    customProperties: true
+  }
+});
 
 export default new Vuetify({ preset });

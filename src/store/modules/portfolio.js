@@ -35,7 +35,7 @@ const mutations = {
       // console.log(state.stocks);
     }
 
-    console.log(state.log);
+    // console.log(state.log);
     state.funds -= stockPrice * quantity;
   },
   SELL_STOCK(state, { stockId, quantity, stockPrice }) {

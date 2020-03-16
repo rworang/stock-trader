@@ -15,7 +15,8 @@ const state = {
   pagePrices: [],
   pageProfiles: [],
   countries: countries,
-  stocks: stocks
+  stocks: stocks,
+  stocksLength: stocks.length
 };
 
 const mutations = {
@@ -66,14 +67,77 @@ const mutations = {
     console.log("Merged responses:", merged);
     state.stocks = merged;
   },
-  SET_STOCKS(state, payload) {
-    state.stocks = payload;
+  SET_STOCKS(state) {
+    state.stocks = stocks.slice(
+      0,
+      state.pageAmount <= stocks.length ? state.pageAmount : stocks.length
+    );
+    // console.log(state.pageAmount);
+  },
+  SORT_STOCKS(state, sorted) {
+    state.stocks = sorted.slice(
+      0,
+      state.pageAmount <= stocks.length ? state.pageAmount : stocks.length
+    );
+    // console.log(state.stocks);
+  },
+  INCREASE_PAGE_AMOUNT(state) {
+    state.pageAmount = state.pageAmount + 16;
+    // console.log(state.pageAmount);
+  },
+  SET_PAGE_AMOUNT(state, payload) {
+    state.pageAmount = payload;
   }
 };
 
 const actions = {
-  setStocks({ commit }, payload) {
-    commit("SET_STOCKS", payload);
+  increasePageAmount({ commit, state }) {
+    if (state.pageAmount + 16 < stocks.length) {
+      commit("INCREASE_PAGE_AMOUNT");
+      commit("SET_STOCKS");
+    } else {
+      commit("SET_PAGE_AMOUNT", stocks.length);
+      commit("SET_STOCKS");
+    }
+  },
+  setStocks({ commit }) {
+    commit("SET_STOCKS");
+  },
+  sortStocks({ commit }, payload) {
+    // console.log(payload.boolean, payload.sortValue, commit, state);
+    let sorted = stocks;
+    if (payload.sortValue === "price") {
+      sorted.sort(function(a, b) {
+        if (!payload.boolean) {
+          return parseFloat(a.price) - parseFloat(b.price);
+        } else {
+          return parseFloat(b.price) - parseFloat(a.price);
+        }
+      });
+    } else if (payload.sortValue === "change") {
+      sorted.sort(function(a, b) {
+        if (!payload.boolean) {
+          return parseFloat(a.chg) - parseFloat(b.chg);
+        } else {
+          return parseFloat(b.chg) - parseFloat(a.chg);
+        }
+      });
+    } else if (payload.sortValue === "percentage") {
+      sorted.sort(function(a, b) {
+        if (payload.boolean) {
+          return parseFloat(b.chg_percent) - parseFloat(a.chg_percent);
+        } else {
+          return parseFloat(a.chg_percent) - parseFloat(b.chg_percent);
+        }
+      });
+    } else if (payload.sortValue === "name") {
+      if (!payload.boolean) {
+        sorted.sort((a, b) => a.name.localeCompare(b.name, "en"));
+      } else {
+        sorted.sort((a, b) => b.name.localeCompare(a.name, "en"));
+      }
+    }
+    commit("SORT_STOCKS", sorted);
   },
   async initStocks({ commit, dispatch }) {
     commit("START_LOAD", "getAllStocks");
@@ -157,10 +221,13 @@ const actions = {
 
 const getters = {
   stocks: state => {
-    return state.stocks.slice(0, state.pageAmount);
+    return state.stocks;
   },
   pageAmount: state => {
     return state.pageAmount;
+  },
+  stocksLength: state => {
+    return state.stocksLength;
   },
   loading: state => {
     return state.loading;

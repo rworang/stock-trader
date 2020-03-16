@@ -7,6 +7,8 @@
     @mouseleave="elevation = 1"
     v-click-outside="onClickOutside"
     :class="$vuetify.theme.dark ? 'card-hover-dark' : 'card-hover-light'"
+    class="ma-2"
+    :id="stock.short_name"
   >
     <v-container fluid class="pb-0">
       <v-row>
@@ -153,41 +155,44 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="2" class="py-0 pr-0 text-right">
+            <v-col class="py-0 pr-0 text-right flex-grow-1">
               <div class="grey--text">
                 Amount
               </div>
             </v-col>
-            <v-col class="py-0 pr-0">
+            <v-col class="py-0 pr-0 flex-grow-1">
               <div class="grey--text">
                 Bought at
               </div>
             </v-col>
-            <v-col class="py-0 pr-0">
+            <v-col class="py-0 pr-0 flex-grow-1">
               <div class="grey--text">
                 Profit/loss
               </div>
             </v-col>
-            <v-col cols="5" class="py-0 pr-0">
+            <v-col class="py-0 pr-0 flex-grow-1">
               <div class="grey--text">
-                Buy date/time
+                Date
               </div>
             </v-col>
           </v-row>
-          <v-row v-for="logEntry in log.slice(log.length - 3, log.length).reverse()" :key="logEntry.dateTime">
-            <v-col cols="2" class="py-0 pr-1 text-right">
+          <v-row
+            v-for="logEntry in log.slice(log.length - 3, log.length).reverse()"
+            :key="logEntry.dateTime"
+          >
+            <v-col class="py-0 pr-1 text-right flex-grow-1">
               <div>
                 {{ logEntry.quantity }}
               </div>
             </v-col>
 
-            <v-col class="py-0 pr-1">
+            <v-col class="py-0 pr-1 flex-grow-1">
               <div class="currency">
                 {{ logEntry.bought_at }}
               </div>
             </v-col>
 
-            <v-col class="py-0 pr-1">
+            <v-col class="py-0 pr-1 flex-grow-1">
               <div class="currency">
                 <span
                   v-html="calcProfitLoss(logEntry.bought_at, logEntry.quantity)"
@@ -195,9 +200,9 @@
               </div>
             </v-col>
 
-            <v-col cols="5" class="py-0 pr-1">
-              <div>
-                {{ logEntry.dateTime }}
+            <v-col class="py-0 pr-1 flex-grow-1">
+              <div class="subtitle-2" :title="logEntry.dateTime.slice(10)">
+                {{ logEntry.dateTime.slice(0, 10) }}
               </div>
             </v-col>
           </v-row>
@@ -342,6 +347,7 @@
           </v-container>
         </v-row>
       </v-expand-transition>
+
       <v-snackbar
         v-model="snackbar"
         top
@@ -411,6 +417,10 @@ export default {
         return "white--text";
       }
     }
+  },
+
+  created() {
+    console.log(this.stocks.length, this.stock.stock_id);
   },
 
   watch: {
