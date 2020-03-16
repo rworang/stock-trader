@@ -420,7 +420,20 @@ export default {
   },
 
   created() {
-    console.log(this.stocks.length, this.stock.stock_id);
+    // let last = function last(array, n) {
+    //   if (array == null) return void 0;
+    //   if (n == null) return array[array.length - 1];
+    //   return array.slice(Math.max(array.length - n, 0));
+    // };
+    // const lastStock = last(this.stocks);
+    // // console.log(this.stocks, last(this.stocks), this.stock);
+    //
+    // if (lastStock.id === this.stock.id) {
+    //   console.log("I am the last stock");
+    //   let boolean = true;
+    //   let value = "name";
+    //   this.$store.dispatch("sortStocks", { boolean, value });
+    // }
   },
 
   watch: {

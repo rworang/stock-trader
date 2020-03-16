@@ -201,9 +201,6 @@ export default {
   },
   created() {
     // this.$store.dispatch("initStocks");
-    let boolean = true;
-    let value = "name";
-    this.$store.dispatch("sortStocks", { boolean, value });
   },
   computed: {},
   data: () => ({

@@ -1,6 +1,6 @@
 <template>
   <div>
-<!--    <app-page-header page="portfolio" :sort-now="sortNow"></app-page-header>-->
+    <!--    <app-page-header page="portfolio" :sort-now="sortNow"></app-page-header>-->
     <v-row>
       <v-col
         cols="12"
@@ -23,18 +23,13 @@
 </template>
 
 <script>
-// const Stock = () => import("@/components/stock/StockIndex");
-// import PageHeader from "@/components/PageHeader";
-
 export default {
   name: "Portfolio",
   components: {
-    // "app-page-header": PageHeader,
     "app-stock": () => import("@/components/stock/StockIndex")
   },
   data: () => {
     return {
-      sortNow: false,
       allLoaded: false
     };
   },
@@ -50,19 +45,14 @@ export default {
     }
   },
   watch: {
-    stocks() {
-      // this.stocks = this.$store.getters.stocks;
-      // console.log(this.stocks);
-    },
+    stocks() {},
     pageAmount() {
       if (this.$store.getters.pageAmount >= this.stocksLength) {
         this.allLoaded = true;
       }
     }
   },
-  mounted() {
-    // this.sortNow = true;
-  },
+  mounted() {},
   methods: {}
 };
 </script>

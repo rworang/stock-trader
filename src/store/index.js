@@ -15,8 +15,7 @@ const vuexLocal = new VuexPersistence({
   reducer: (state) => ({ portfolio: state.portfolio })
 });
 
-console.log(portfolio.state);
-console.log(vuexLocal);
+console.log(vuexLocal.storage);
 
 export default new Vuex.Store({
   modules: {

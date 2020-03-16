@@ -27,28 +27,21 @@
   </div>
 </template>
 <script>
-// const Stock = () => import("@/components/stock/StockIndex");
-// import Stock from "@/components/stock/StockIndex";
-// import PageHeader from "@/components/PageHeader";
-
 export default {
   name: "Stocks",
   components: {
-    // "app-page-header": PageHeader,
     "app-stock": () => import("@/components/stock/StockIndex")
   },
   data: () => {
     return {
-      sorted: false,
       allLoaded: false
     };
   },
-  // created() {
-  //   // this.$store.dispatch("initStocks");
-  //   let boolean = true;
-  //   let value = "name";
-  //   this.$store.dispatch("sortStocks", { boolean, value });
-  // },
+  beforeMount() {
+    let boolean = false;
+    let sortValue = "name";
+    this.$store.dispatch("sortStocks", { boolean, sortValue });
+  },
   computed: {
     stocks() {
       return this.$store.getters.stocks;
@@ -61,21 +54,14 @@ export default {
     }
   },
   watch: {
-    stocks() {
-      // this.stocks = this.$store.getters.stocks;
-      // console.log(this.stocks);
-    },
+    stocks() {},
     pageAmount() {
       if (this.$store.getters.pageAmount >= this.stocksLength) {
         this.allLoaded = true;
       }
     }
   },
-  mounted() {
-    // let boolean = true;
-    // let value = "name";
-    // this.$store.dispatch("sortStocks", { boolean, value });
-  },
+  mounted() {},
   methods: {}
 };
 </script>

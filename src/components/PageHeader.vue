@@ -43,7 +43,7 @@ export default {
 
   data: () => {
     return {
-      sortOrder: false,
+      sortOrder: true,
       sortItemsMenu: "name",
       sortItems: ["name", "price", "change", "percentage"]
     };
