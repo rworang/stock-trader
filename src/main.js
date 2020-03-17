@@ -35,4 +35,4 @@ new Vue({
   store,
   vuetify,
   render: h => h(App)
-}).$mount("#default");
+}).$mount("#app");
