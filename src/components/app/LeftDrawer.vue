@@ -2,6 +2,7 @@
   <v-navigation-drawer
     class="grey darken-4"
     :mini-variant="mini"
+    v-model="mini"
     permanent
     fixed
     dark

@@ -1,5 +1,5 @@
 const state = {
-  dark: true
+  dark: false
 };
 
 const mutations = {

@@ -1,8 +1,10 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import VueMeta from "vue-meta";
 import Stocks from "../views/Stocks.vue";
 
 Vue.use(VueRouter);
+Vue.use(VueMeta);
 
 const routes = [
   {

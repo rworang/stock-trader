@@ -22,20 +22,28 @@
 <script>
 export default {
   name: "Portfolio",
+
+  metaInfo: {
+    title: "Portfolio"
+  },
+
   components: {
     "app-stock": () => import("@/components/stock/Index")
   },
+
   props: {
     rapport: {
       type: Boolean,
       default: false
     }
   },
+
   data: () => {
     return {
       allLoaded: false
     };
   },
+
   computed: {
     stockPortfolio() {
       return this.$store.getters.stockPortfolio;
@@ -47,6 +55,7 @@ export default {
       return this.$store.getters.stocksLength;
     }
   },
+
   watch: {
     pageAmount() {
       if (this.$store.getters.pageAmount >= this.stocksLength) {
@@ -54,6 +63,7 @@ export default {
       }
     }
   },
+
   mounted() {},
   methods: {}
 };

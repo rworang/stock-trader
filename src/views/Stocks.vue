@@ -24,25 +24,34 @@
 <script>
 export default {
   name: "Stocks",
+
+  metaInfo: {
+    title: "Stocks"
+  },
+
   components: {
     "app-stock": () => import("@/components/stock/Index")
   },
+
   props: {
     rapport: {
       type: Boolean,
       default: false
     }
   },
+
   data: () => {
     return {
       allLoaded: false
     };
   },
+
   beforeMount() {
     let boolean = false;
     let sortValue = "name";
     this.$store.dispatch("sortStocks", { boolean, sortValue });
   },
+
   computed: {
     stocks() {
       return this.$store.getters.stocks;
@@ -54,6 +63,7 @@ export default {
       return this.$store.getters.stocksLength;
     }
   },
+
   watch: {
     stocks() {},
     pageAmount() {
@@ -62,6 +72,7 @@ export default {
       }
     }
   },
+
   mounted() {},
   methods: {}
 };

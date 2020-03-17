@@ -2,123 +2,15 @@
   <v-theme-provider root>
     <v-app>
       <app-left-drawer />
-
       <app-bar />
-
       <v-content>
-        <v-container fluid class="py-0" style="height:100%;">
-          <v-row style="height:100%;">
-            <v-slide-x-transition>
-              <v-col :cols="mini && rapport ? 9 : 12">
-                <v-row
-                  :class="
-                    $vuetify.theme.dark ? 'border-light-b' : 'border-dark-b'
-                  "
-                  class="mb-3"
-                >
-                  <v-col class="py-0">
-                    <v-tabs>
-                      <v-tab
-                        v-for="(tab, index) in tabs"
-                        :key="tab.value + index"
-                        elevation="0"
-                        class="text-capitalize"
-                        tile
-                        :to="tab.to"
-                        >{{ tab.value }}</v-tab
-                      >
-                    </v-tabs>
-                  </v-col>
-                  <v-col class="py-0">
-                    <v-scale-transition origin="right">
-                      <app-page-header
-                        v-if="$root._route.name === 'stocks'"
-                        :page="$root._route.name"
-                        :rapport="rapport.get"
-                      ></app-page-header>
-                    </v-scale-transition>
-                  </v-col>
-                </v-row>
-                <router-view :rapport="rapport.get"></router-view>
-              </v-col>
-            </v-slide-x-transition>
-            <v-col cols="3" class="p-relative">
-              <v-slide-x-transition>
-                <v-navigation-drawer
-                  v-if="mini && rapport"
-                  :class="$vuetify.theme.dark ? 'dark-2' : 'grey lighten-3'"
-                  width="100%"
-                  absolute
-                  permanent
-                  right
-                >
-                  <template v-slot:prepend>
-                    <v-list-item two-line>
-                      <v-list-item-avatar>
-                        <v-img
-                          aspect-ratio="1"
-                          class="grey lighten-2"
-                          max-height="40"
-                        >
-                          <template v-slot:placeholder>
-                            <v-row
-                              class="fill-height ma-0"
-                              align="center"
-                              justify="center"
-                            >
-                              <v-icon small color="grey">mdi-image</v-icon>
-                            </v-row>
-                          </template>
-                        </v-img>
-                      </v-list-item-avatar>
-
-                      <v-list-item-content>
-                        <v-list-item-title>John Doe</v-list-item-title>
-                        <v-list-item-subtitle>
-                          <span class="currency">{{
-                            $store.getters.funds.toLocaleString()
-                          }}</span></v-list-item-subtitle
-                        >
-                      </v-list-item-content>
-                    </v-list-item>
-                  </template>
-
-                  <v-divider></v-divider>
-
-                  <!--                  <v-list dense>-->
-                  <!--                    <v-list-item v-for="item in items" :key="item.title">-->
-                  <!--                      <v-list-item-icon>-->
-                  <!--                        <v-icon>{{ item.icon }}</v-icon>-->
-                  <!--                      </v-list-item-icon>-->
-
-                  <!--                      <v-list-item-content>-->
-                  <!--                        <v-list-item-title>{{ item.title }}</v-list-item-title>-->
-                  <!--                      </v-list-item-content>-->
-                  <!--                    </v-list-item>-->
-                  <!--                  </v-list>-->
-                </v-navigation-drawer>
-              </v-slide-x-transition>
-            </v-col>
-          </v-row>
+        <v-container fluid>
+          <app-toolbar />
+          <router-view />
         </v-container>
       </v-content>
-
       <app-footer />
-
-      <!-- Go to top button-->
-      <v-fab-transition>
-        <v-btn
-          title="Go to top"
-          fixed
-          bottom
-          right
-          fab
-          dark
-          v-scroll-to="'#app'"
-        >
-          <v-icon>mdi-arrow-up</v-icon>
-        </v-btn>
-      </v-fab-transition>
+      <app-to-top />
     </v-app>
   </v-theme-provider>
 </template>
@@ -126,16 +18,26 @@
 <script>
 import AppBar from "@/components/app/AppBar";
 import LeftDrawer from "@/components/app/LeftDrawer";
+import Toolbar from "@/components/app/Toolbar";
 import Footer from "@/components/app/Footer";
-import PageHeader from "@/components/PageHeader";
+import ToTopButton from "@/components/app/ToTopButton";
 
 export default {
   name: "App",
+
+  metaInfo: {
+    // if no subcomponents specify a metaInfo.title, this title will be used
+    title: "Stock Trader",
+    // all titles will be injected into this template
+    titleTemplate: "%s | Invest in a new future!"
+  },
+
   components: {
     "app-bar": AppBar,
     "app-left-drawer": LeftDrawer,
+    "app-toolbar": Toolbar,
     "app-footer": Footer,
-    "app-page-header": PageHeader
+    "app-to-top": ToTopButton
   },
   beforeMount() {
     if (this.$vuetify.theme.isDark && window.localStorage.vuex) {
@@ -143,38 +45,7 @@ export default {
         window.localStorage.vuex
       ).theme.dark;
     }
-  },
-  computed: {
-    rapport: {
-      get() {
-        return this.$store.getters.rapport;
-      },
-      set() {
-        this.$store.dispatch("toggleRapport");
-      }
-    },
-    mini: {
-      get() {
-        return this.$store.getters.mini;
-      },
-      set() {
-        this.$store.dispatch("toggleMini");
-      }
-    }
-  },
-  data: () => ({
-    tabs: [
-      {
-        value: "stocks",
-        to: "/"
-      },
-      {
-        value: "portfolio",
-        to: "/portfolio"
-      }
-    ]
-  }),
-  methods: {}
+  }
 };
 </script>
 

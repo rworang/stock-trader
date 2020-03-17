@@ -1,6 +1,6 @@
 const state = {
   rapport: false,
-  mini: true,
+  mini: false,
   drawerItems: [
     {
       id: 0,
@@ -28,6 +28,16 @@ const state = {
       value: "End Day",
       icon: "mdi-stop-circle-outline",
       to: ""
+    }
+  ],
+  tabs: [
+    {
+      value: "stocks",
+      to: "/"
+    },
+    {
+      value: "portfolio",
+      to: "/portfolio"
     }
   ]
 };
@@ -59,6 +69,9 @@ const getters = {
   },
   drawerItems: state => {
     return state.drawerItems;
+  },
+  tabs: state => {
+    return state.tabs;
   }
 };
 

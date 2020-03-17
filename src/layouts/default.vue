@@ -1,4 +1,17 @@
-<template> </template>
+<template>
+  <v-sheet>
+    <app-left-drawer />
+    <app-bar />
+    <v-content>
+      <v-container fluid>
+        <app-toolbar />
+        <router-view />
+      </v-container>
+    </v-content>
+    <app-footer />
+    <app-to-top />
+  </v-sheet>
+</template>
 
 <script>
 export default {
