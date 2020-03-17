@@ -1,7 +1,7 @@
 <template>
   <v-fab-transition>
     <v-btn
-      v-scroll-to="'#default'"
+      v-scroll-to="'#app'"
       title="Go to top"
       bottom
       fixed

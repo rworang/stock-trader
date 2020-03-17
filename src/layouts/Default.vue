@@ -1,26 +1,24 @@
 <template>
-  <div>
+  <span>
     <app-left-drawer />
     <app-bar />
     <v-content>
       <v-container fluid class="mb-12">
         <app-toolbar />
-        <v-fade-transition>
-          <slot />
-        </v-fade-transition>
+        <slot />
       </v-container>
     </v-content>
     <app-footer />
     <app-to-top />
-  </div>
+  </span>
 </template>
 
 <script>
-import AppBar from "@/components/default/AppBar";
-import LeftDrawer from "@/components/default/LeftDrawer";
-import Toolbar from "@/components/default/Toolbar";
-import Footer from "@/components/default/Footer";
-import ToTopButton from "@/components/default/ToTopButton";
+import AppBar from "@/components/app/AppBar";
+import LeftDrawer from "@/components/app/LeftDrawer";
+import Toolbar from "@/components/app/Toolbar";
+import Footer from "@/components/app/Footer";
+import ToTopButton from "@/components/app/ToTopButton";
 
 export default {
   name: "DefaultLayout",
@@ -31,12 +29,7 @@ export default {
     "app-toolbar": Toolbar,
     "app-footer": Footer,
     "app-to-top": ToTopButton
-  },
-
-  computed: {},
-  watch: {},
-  data: () => ({}),
-  methods: {}
+  }
 };
 </script>
 

@@ -1,19 +1,14 @@
 <template>
   <v-row>
-    <v-toolbar
-      dense
-      elevation="0"
-      :style="theme ? 'border-bottom:solid 2px rgba(0,0,0,0.2);' : ''"
-      color="transparent"
-    >
+    <v-toolbar dense flat color="transparent">
       <v-tabs class="pl-5">
         <v-tab
+          @click="$store.dispatch('setMini', true)"
           v-for="(tab, index) in tabs"
           :key="tab.value + index"
-          elevation="0"
           class="text-capitalize"
-          tile
           :to="tab.to"
+          tile
           >{{ tab.value }}</v-tab
         >
       </v-tabs>

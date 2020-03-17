@@ -38,6 +38,10 @@ const state = {
     {
       value: "portfolio",
       to: "/portfolio"
+    },
+    {
+      value: "register",
+      to: "/register"
     }
   ]
 };
@@ -46,8 +50,14 @@ const mutations = {
   TOGGLE_RAPPORT(state) {
     state.rapport = !state.rapport;
   },
+  SET_RAPPORT(state, payload) {
+    state.rapport = payload;
+  },
   TOGGLE_MINI(state) {
     state.mini = !state.mini;
+  },
+  SET_MINI(state, payload) {
+    state.mini = payload;
   }
 };
 
@@ -55,8 +65,14 @@ const actions = {
   toggleRapport({ commit }) {
     commit("TOGGLE_RAPPORT");
   },
+  setRapport({ commit }, payload) {
+    commit("SET_RAPPORT", payload);
+  },
   toggleMini({ commit }) {
     commit("TOGGLE_MINI");
+  },
+  setMini({ commit }, payload) {
+    commit("SET_MINI", payload);
   }
 };
 

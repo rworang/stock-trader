@@ -9,7 +9,9 @@
         :key="stock.id"
         class="pa-0"
       >
-        <app-stock :stock="stock" page="stocks"></app-stock>
+        <v-fade-transition>
+          <app-stock :stock="stock"></app-stock>
+        </v-fade-transition>
       </v-col>
     </v-row>
     <v-row v-if="!allLoaded" class="mt-4">
@@ -19,59 +21,36 @@
     </v-row>
   </v-col>
 </template>
+
 <script>
 export default {
   name: "Stocks",
-
   metaInfo: {
     title: "Stocks"
   },
-
   components: {
     "app-stock": () => import("@/components/stock/Index")
   },
-
-  props: {
-    rapport: {
-      type: Boolean,
-      default: false
+  beforeMount() {
+    this.$store.dispatch("sortStocks", { boolean: false, sortValue: "name" });
+  },
+  watch: {
+    pageAmount() {
+      if (this.$store.getters.pageAmount >= this.$store.getters.stocksLength) {
+        this.allLoaded = true;
+      }
     }
   },
-
-  data: () => {
-    return {
-      allLoaded: false
-    };
-  },
-
-  beforeMount() {
-    let boolean = false;
-    let sortValue = "name";
-    this.$store.dispatch("sortStocks", { boolean, sortValue });
-  },
-
   computed: {
     stocks() {
       return this.$store.getters.stocks;
     },
     pageAmount() {
       return this.$store.getters.pageAmount;
-    },
-    stocksLength() {
-      return this.$store.getters.stocksLength;
     }
   },
-
-  watch: {
-    stocks() {},
-    pageAmount() {
-      if (this.$store.getters.pageAmount >= this.stocksLength) {
-        this.allLoaded = true;
-      }
-    }
-  },
-
-  mounted() {},
-  methods: {}
+  data: () => ({
+    allLoaded: false
+  })
 };
 </script>

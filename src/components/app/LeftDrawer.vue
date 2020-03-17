@@ -36,12 +36,20 @@
         <!--##- check item type 'link', drawerItem needs to have 'to' property can be empty -->
         <template v-if="item.type === 'link'">
           <v-fade-transition>
-            <v-list-item link :to="item.to" :title="item.value">
+            <v-list-item
+              link
+              :to="item.to"
+              :title="item.value"
+              color="primary"
+              @click="$store.dispatch('setMini', true)"
+            >
               <v-list-item-action>
                 <v-icon>{{ item.icon }}</v-icon>
               </v-list-item-action>
               <v-list-item-content>
-                <v-list-item-title>{{ item.value }}</v-list-item-title>
+                <v-list-item-title class="white--text">{{
+                  item.value
+                }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-fade-transition>

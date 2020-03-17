@@ -1,28 +1,21 @@
 <template>
   <v-theme-provider root>
     <v-app>
-      <layout-default>
-        <router-view />
-      </layout-default>
+      <v-fade-transition>
+        <component :is="this.$route.meta.layout" v-if="loaded">
+          <router-view />
+        </component>
+      </v-fade-transition>
     </v-app>
   </v-theme-provider>
 </template>
 
 <script>
-import DefaultLayout from "@/layouts/Default";
-
 export default {
   name: "App",
-
   metaInfo: {
-    // if no subcomponents specify a metaInfo.title, this title will be used
     title: "Stock Trader",
-    // all titles will be injected into this template
     titleTemplate: "%s | Invest in a new future!"
-  },
-
-  components: {
-    "layout-default": DefaultLayout
   },
   beforeMount() {
     if (this.$vuetify.theme.isDark && window.localStorage.vuex) {
@@ -30,6 +23,12 @@ export default {
         window.localStorage.vuex
       ).theme.dark;
     }
+  },
+  data: () => ({
+    loaded: false
+  }),
+  mounted() {
+    this.loaded = true;
   }
 };
 </script>
@@ -61,32 +60,6 @@ export default {
 
 .pointer {
   cursor: pointer;
-}
-
-.border-radius-tl {
-  border-top-left-radius: 12px !important;
-}
-.border-radius-bl {
-  border-bottom-left-radius: 12px !important;
-}
-.border-radius-l {
-  border-top-left-radius: 12px !important;
-  border-bottom-left-radius: 12px !important;
-}
-
-.border-radius-tr {
-  border-top-right-radius: 12px !important;
-}
-.border-radius-br {
-  border-bottom-right-radius: 12px !important;
-}
-.border-radius-r {
-  border-top-right-radius: 12px !important;
-  border-bottom-right-radius: 12px !important;
-}
-
-.border-radius {
-  border-radius: 12px !important;
 }
 
 .border-dark-y {

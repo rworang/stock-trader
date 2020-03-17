@@ -1,7 +1,9 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import VueMeta from "vue-meta";
-import Stocks from "../views/Stocks.vue";
+import Stocks from "@/views/Stocks.vue";
+
+import DefaultLayout from "@/layouts/Default.vue";
 
 Vue.use(VueRouter);
 Vue.use(VueMeta);
@@ -10,13 +12,29 @@ const routes = [
   {
     path: "/",
     name: "stocks",
-    component: Stocks
+    component: Stocks,
+    meta: {
+      layout: DefaultLayout
+    }
   },
   {
     path: "/portfolio",
     name: "portfolio",
     component: () =>
-      import(/* webpackChunkName: "portfolio" */ "../views/Portfolio.vue")
+      import(/* webpackChunkName: "portfolio" */ "@/views/Portfolio.vue"),
+    meta: {
+      layout: DefaultLayout
+    }
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: () =>
+      import(/* webpackChunkName: "register" */ "@/views/Register.vue"),
+    meta: {
+      layout: () =>
+        import(/* webpackChunkName: "basic layout" */ "@/layouts/Basic.vue")
+    }
   }
 ];
 
