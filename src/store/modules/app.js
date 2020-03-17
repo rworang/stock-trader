@@ -1,11 +1,39 @@
 const state = {
   rapport: false,
-  mini: true
+  mini: true,
+  drawerItems: [
+    {
+      id: 0,
+      type: "title",
+      value: "Stock Trader",
+      icon: "mdi-chevron-double-right"
+    },
+    {
+      id: 1,
+      type: "link",
+      value: "Stocks",
+      icon: "mdi-cash-multiple",
+      to: "/"
+    },
+    {
+      id: 2,
+      type: "link",
+      value: "Portfolio",
+      icon: "mdi-briefcase",
+      to: "/portfolio"
+    },
+    {
+      id: 3,
+      type: "link",
+      value: "End Day",
+      icon: "mdi-stop-circle-outline",
+      to: ""
+    }
+  ]
 };
 
 const mutations = {
   TOGGLE_RAPPORT(state) {
-    // console.log("FROM: " + state.rapport + " TO: " + !state.rapport);
     state.rapport = !state.rapport;
   },
   TOGGLE_MINI(state) {
@@ -28,6 +56,9 @@ const getters = {
   },
   mini: state => {
     return state.mini;
+  },
+  drawerItems: state => {
+    return state.drawerItems;
   }
 };
 

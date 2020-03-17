@@ -13,12 +13,7 @@
       elevation="0"
       class="text-capitalize"
       tile
-      @click.stop="
-        () => {
-          rapport = !rapport;
-          mini = true;
-        }
-      "
+      @click.stop="rapport = !rapport"
     >
       <span class="currency">{{ $store.getters.funds.toLocaleString() }}</span>
     </v-btn>
@@ -28,20 +23,29 @@
 export default {
   name: "AppBar",
 
-  props: {
+  computed: {
     rapport: {
-      type: Boolean,
-      default: false
+      get() {
+        return this.$store.getters.rapport;
+      },
+      set() {
+        this.$store.dispatch("toggleRapport");
+      }
     },
     mini: {
-      type: Boolean,
-      default: true
+      get() {
+        return this.$store.getters.mini;
+      },
+      set() {
+        this.$store.dispatch("toggleMini");
+      }
+    },
+    vuetifyTheme() {
+      return this.$vuetify.theme.isDark;
     }
   },
 
   data: () => ({}),
-
-  computed: {},
 
   methods: {}
 };
