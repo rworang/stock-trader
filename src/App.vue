@@ -1,26 +1,15 @@
 <template>
   <v-theme-provider root>
     <v-app>
-      <app-left-drawer />
-      <app-bar />
-      <v-content>
-        <v-container fluid>
-          <app-toolbar />
-          <router-view />
-        </v-container>
-      </v-content>
-      <app-footer />
-      <app-to-top />
+      <layout-default>
+        <router-view />
+      </layout-default>
     </v-app>
   </v-theme-provider>
 </template>
 
 <script>
-import AppBar from "@/components/app/AppBar";
-import LeftDrawer from "@/components/app/LeftDrawer";
-import Toolbar from "@/components/app/Toolbar";
-import Footer from "@/components/app/Footer";
-import ToTopButton from "@/components/app/ToTopButton";
+import DefaultLayout from "@/layouts/Default";
 
 export default {
   name: "App",
@@ -33,11 +22,7 @@ export default {
   },
 
   components: {
-    "app-bar": AppBar,
-    "app-left-drawer": LeftDrawer,
-    "app-toolbar": Toolbar,
-    "app-footer": Footer,
-    "app-to-top": ToTopButton
+    "layout-default": DefaultLayout
   },
   beforeMount() {
     if (this.$vuetify.theme.isDark && window.localStorage.vuex) {

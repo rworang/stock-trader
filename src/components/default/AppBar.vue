@@ -10,6 +10,7 @@
     </v-fade-transition>
     <v-spacer></v-spacer>
     <v-btn
+      color="transparent"
       elevation="0"
       class="text-capitalize"
       tile

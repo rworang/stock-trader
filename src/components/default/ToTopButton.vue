@@ -1,6 +1,14 @@
 <template>
   <v-fab-transition>
-    <v-btn title="Go to top" fixed bottom right fab dark v-scroll-to="'#app'">
+    <v-btn
+      v-scroll-to="'#default'"
+      title="Go to top"
+      bottom
+      fixed
+      right
+      dark
+      fab
+    >
       <v-icon>mdi-arrow-up</v-icon>
     </v-btn>
   </v-fab-transition>

@@ -3,10 +3,8 @@
     <v-row>
       <v-col
         cols="12"
-        :sm="rapport ? 12 : 6"
-        :md="rapport ? 6 : 4"
-        lg="4"
-        :xl="rapport ? 4 : 3"
+        md="6"
+        lg="3"
         v-for="stock in stocks"
         :key="stock.id"
         class="pa-0"

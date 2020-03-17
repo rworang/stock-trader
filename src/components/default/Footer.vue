@@ -1,5 +1,5 @@
 <template>
-  <v-footer dark>
+  <v-footer absolute dark>
     <v-row>
       <v-col class="white--text text-center">
         {{ $appName + " &copy; " + $date().format("YYYY") }}
