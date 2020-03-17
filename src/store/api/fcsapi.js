@@ -21,11 +21,11 @@ const state = {
 
 const mutations = {
   START_LOAD(state) {
-    console.log("START_LOAD");
+    // console.log("START_LOAD");
     state.loading = true;
   },
   STOP_LOAD(state) {
-    console.log("STOP_LOAD");
+    // console.log("STOP_LOAD");
     state.loading = false;
   },
   SET_API_MSG(state, payload) {
@@ -33,22 +33,22 @@ const mutations = {
   },
   SET_PAGE_STOCKS(state, payload) {
     state.pageList = payload;
-    console.log(state.pageList);
+    // console.log(state.pageList);
   },
   SET_PAGE_PRICES(state, payload) {
     state.pagePrices = payload;
-    console.log(state.pagePrices);
+    // console.log(state.pagePrices);
   },
   SET_PAGE_PROFILES(state, payload) {
     state.pageProfiles = payload;
-    console.log(state.pageProfiles);
+    // console.log(state.pageProfiles);
   },
   LOAD_NEXT_PAGE(state) {
-    console.log("Loading next page");
+    // console.log("Loading next page");
     state.indicesId++;
   },
   LOAD_PREV_PAGE(state) {
-    console.log("Loading prev page");
+    // console.log("Loading prev page");
     state.indicesId--;
   },
   MERGE_STOCKS(state) {
@@ -192,7 +192,7 @@ const actions = {
       .get(base_url + "/profile?id=" + getters.pageIdQuery + api_key)
       .then(r => {
         // console.log(r);
-        console.warn("API message :", r.data.msg);
+        // console.warn("API message :", r.data.msg);
         commit("SET_PAGE_PROFILES", r.data.response);
         commit("STOP_LOAD", "SUCCESS: loadPageProfiles");
       })

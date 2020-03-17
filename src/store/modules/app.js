@@ -5,7 +5,7 @@ const state = {
 
 const mutations = {
   TOGGLE_RAPPORT(state) {
-    console.log("FROM: " + state.rapport + " TO: " + !state.rapport);
+    // console.log("FROM: " + state.rapport + " TO: " + !state.rapport);
     state.rapport = !state.rapport;
   },
   TOGGLE_MINI(state) {
