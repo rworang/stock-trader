@@ -1,5 +1,5 @@
 <template>
-  <v-footer absolute dark>
+  <v-footer absolute dark id="footer">
     <v-row>
       <v-col class="white--text text-center">
         {{ $appName + " &copy; " + $date().format("YYYY") }}
@@ -9,12 +9,6 @@
 </template>
 <script>
 export default {
-  name: "Footer",
-
-  computed: {},
-
-  data: () => ({}),
-
-  methods: {}
+  name: "Footer"
 };
 </script>

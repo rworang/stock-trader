@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app dark dense elevation="0" class="grey darken-4">
+  <v-app-bar app dark dense flat class="grey darken-4">
     <v-fade-transition>
       <v-toolbar-title
         class="title pointer"
@@ -10,11 +10,11 @@
     </v-fade-transition>
     <v-spacer></v-spacer>
     <v-btn
+      @click.stop="rapport = !rapport"
+      class="text-capitalize"
       color="transparent"
       elevation="0"
-      class="text-capitalize"
       tile
-      @click.stop="rapport = !rapport"
     >
       <span class="currency">{{ $store.getters.funds.toLocaleString() }}</span>
     </v-btn>
@@ -44,10 +44,6 @@ export default {
     vuetifyTheme() {
       return this.$vuetify.theme.isDark;
     }
-  },
-
-  data: () => ({}),
-
-  methods: {}
+  }
 };
 </script>

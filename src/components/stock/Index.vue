@@ -124,7 +124,7 @@
             </v-row>
             <v-row
               v-for="logEntry in log
-                .slice(log.length - 3, log.length)
+                .slice(log.length < 3 ? 0 : log.length - 3, log.length)
                 .reverse()"
               :key="logEntry.dateTime"
             >
@@ -328,10 +328,6 @@ export default {
     stock: {
       type: Object,
       default: () => ({})
-    },
-    page: {
-      type: String,
-      default: "stocks"
     }
   },
 
@@ -348,6 +344,9 @@ export default {
   }),
 
   computed: {
+    page() {
+      return this.$route.name;
+    },
     stockHeader() {
       const s = this.stock;
       return {
@@ -391,9 +390,6 @@ export default {
   },
 
   watch: {
-    page() {
-      console.log(this.page);
-    },
     quantity() {
       if (!Number.isInteger(this.quantity)) {
         this.quantity = parseInt(this.quantity);

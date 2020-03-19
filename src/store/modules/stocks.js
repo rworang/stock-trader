@@ -47,7 +47,7 @@
 //   }
 // };
 //
-// export app {
+// export default {
 //   state,
 //   mutations,
 //   actions,

@@ -20,3 +20,7 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+
+
+/src/plugins/auth.js
+/src/store/modules/api.js
