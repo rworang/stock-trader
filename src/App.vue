@@ -1,11 +1,12 @@
 <template>
   <v-theme-provider root>
     <v-app>
-      <v-fade-transition>
-        <component :is="this.$route.meta.layout" v-if="loaded">
-          <router-view />
-        </component>
-      </v-fade-transition>
+      <component :is="this.$route.meta.layout" v-if="loaded">
+        <router-view />
+      </component>
+      <v-overlay :value="!loaded">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
     </v-app>
   </v-theme-provider>
 </template>
@@ -24,8 +25,22 @@ export default {
       ).theme.dark;
     }
   },
+  watch: {
+    overlay(val) {
+      val &&
+        setTimeout(() => {
+          this.overlay = false;
+        }, 3000);
+    }
+  },
+  computed: {
+    loading() {
+      return this.$store.getters.loading;
+    }
+  },
   data: () => ({
-    loaded: false
+    loaded: false,
+    overlay: false
   }),
   mounted() {
     this.loaded = true;

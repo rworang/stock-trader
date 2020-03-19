@@ -3,6 +3,7 @@
     <v-row>
       <v-col
         cols="12"
+        sm="6"
         md="6"
         lg="3"
         v-for="stock in stocks"
@@ -25,9 +26,6 @@
 <script>
 export default {
   name: "Stocks",
-  metaInfo: {
-    title: "Stocks"
-  },
   components: {
     "app-stock": () => import("@/components/stock/Index")
   },

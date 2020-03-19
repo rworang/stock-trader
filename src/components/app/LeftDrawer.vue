@@ -105,6 +105,20 @@
             <v-list-item-title>Toggle theme</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item
+          v-if="$auth.check()"
+          title="Logout"
+          @click.prevent="logout"
+        >
+          <v-list-item-action>
+            <v-icon>
+              mdi-logout
+            </v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Log out</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </template>
   </v-navigation-drawer>
@@ -151,6 +165,19 @@ export default {
       setTimeout(() => {
         location.reload();
       }, 250);
+    },
+    logout() {
+      this.$auth.logout({
+        makeRequest: false,
+        params: {},
+        url: "auth/logout",
+        success: function() {
+          this.$auth.watch.authenticated = false;
+          this.$auth.watch.loaded = false;
+        },
+        error: function() {},
+        redirect: { name: "auth.login" }
+      });
     }
   }
 };
