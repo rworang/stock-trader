@@ -2,45 +2,34 @@
   <v-theme-provider root>
     <v-app>
       <component :is="this.$route.meta.layout" v-if="loaded">
-        <router-view />
+          <router-view />
       </component>
-      <v-overlay :value="!loaded">
-        <v-progress-circular indeterminate size="64"></v-progress-circular>
-      </v-overlay>
+      <!--        <app-loader v-else />-->
     </v-app>
   </v-theme-provider>
 </template>
 
 <script>
+import Loader from "@/components/app/Loader";
+
 export default {
   name: "App",
   metaInfo: {
     title: "Stock Trader",
     titleTemplate: "%s | Invest in a new future!"
   },
-  beforeMount() {
+  components: {
+    "app-loader": Loader
+  },
+  beforeCreate() {
     if (this.$vuetify.theme.isDark && window.localStorage.vuex) {
       this.$vuetify.theme.isDark = JSON.parse(
         window.localStorage.vuex
       ).theme.dark;
     }
   },
-  watch: {
-    overlay(val) {
-      val &&
-        setTimeout(() => {
-          this.overlay = false;
-        }, 3000);
-    }
-  },
-  computed: {
-    loading() {
-      return this.$store.getters.loading;
-    }
-  },
   data: () => ({
-    loaded: false,
-    overlay: false
+    loaded: false
   }),
   mounted() {
     this.loaded = true;

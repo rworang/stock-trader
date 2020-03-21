@@ -6,13 +6,11 @@ import axios from "axios";
 import router from "./router";
 import store from "./store";
 
-import "./plugins/auth";
 import vuetify from "./plugins/vuetify";
-import VueDayJs from "vue-dayjs-plugin";
-Vue.use(VueDayJs);
-
-import vco from "v-click-outside";
-Vue.use(vco);
+import "./plugins/auth";
+import "./plugins/click-outside";
+import "./plugins/dayjs";
+import "./plugins/page-transitions";
 
 Vue.config.productionTip = false;
 Vue.prototype.$appName = "Stock Trader";

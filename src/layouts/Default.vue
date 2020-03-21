@@ -5,7 +5,9 @@
     <v-content>
       <v-container fluid class="mb-12">
         <app-toolbar />
-        <slot />
+        <vue-page-transition>
+          <slot />
+        </vue-page-transition>
       </v-container>
     </v-content>
     <app-footer />

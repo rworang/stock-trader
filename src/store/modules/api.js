@@ -6,13 +6,15 @@ export default {
   },
   mutations: {
     SET_ERRORS(state, value) {
+      // console.log("err: ", value);
       state.errorsMessage = value;
     },
     SET_SUCCESS_MESSAGE(state, value) {
+      // console.log("succ: ", value);
       state.successMessage = value;
     },
     SET_LOADING(state, value) {
-      console.log(value);
+      // console.log("load: ", value);
       state.loading = value;
     }
   },
@@ -22,8 +24,8 @@ export default {
     }
   },
   getters: {
-    rapport: state => {
-      return state.rapport;
+    loading: state => {
+      return state.loading;
     }
   }
 };

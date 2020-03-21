@@ -26,7 +26,7 @@ Vue.use(require("@websanova/vue-auth"), {
     interval: 30,
     authType: "bearer"
   },
-  authRedirect: { path: "/" },
-  loginData: { redirect: "" }
-  // notFoundRedirect: { path: '/' },
+  authRedirect: { path: "/login" },
+  loginData: { redirect: "" },
+  notFoundRedirect: { path: "/" }
 });

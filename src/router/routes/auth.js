@@ -13,7 +13,8 @@ export default [
     meta: {
       auth: false,
       title: "Login",
-      layout: BasicLayout
+      layout: BasicLayout,
+      transition: "fade-in-top"
     }
   },
   {
@@ -23,7 +24,8 @@ export default [
     meta: {
       auth: false,
       title: "Register",
-      layout: BasicLayout
+      layout: BasicLayout,
+      transition: "fade-in-top"
     }
   },
   {
@@ -33,7 +35,8 @@ export default [
     meta: {
       auth: false,
       title: "Forgot Password",
-      layout: BasicLayout
+      layout: BasicLayout,
+      transition: "fade-in-top"
     }
   },
   {
@@ -43,7 +46,12 @@ export default [
     meta: {
       auth: false,
       title: "Reset Password",
-      layout: BasicLayout
+      layout: BasicLayout,
+      transition: "fade-in-top"
     }
+  },
+  {
+    path: "*",
+    redirect: "/"
   }
 ];

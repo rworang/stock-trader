@@ -39,10 +39,6 @@ export default {
       {
         value: "portfolio",
         to: "/portfolio"
-      },
-      {
-        value: "register",
-        to: "/register"
       }
     ]
   },

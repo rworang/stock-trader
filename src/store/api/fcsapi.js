@@ -8,7 +8,7 @@ const api_key =
   "&access_key=" + "XvmL2QYjfPLCLLMqldUxWA6RsBFxCmxLR7I5W6sAtapQKbltGg";
 
 const state = {
-  loading: false,
+  loadingStocks: false,
   indicesId: 2,
   pageAmount: 16,
   pageList: [],
@@ -22,11 +22,11 @@ const state = {
 const mutations = {
   START_LOAD(state) {
     // console.log("START_LOAD");
-    state.loading = true;
+    state.loadingStocks = true;
   },
   STOP_LOAD(state) {
     // console.log("STOP_LOAD");
-    state.loading = false;
+    state.loadingStocks = false;
   },
   SET_API_MSG(state, payload) {
     state.apiMsg = payload;
@@ -229,8 +229,8 @@ const getters = {
   stocksLength: state => {
     return state.stocksLength;
   },
-  loading: state => {
-    return state.loading;
+  loadingStocks: state => {
+    return state.loadingStocks;
   },
   pageIdQuery: state => {
     let q = "";

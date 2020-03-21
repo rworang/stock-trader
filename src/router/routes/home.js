@@ -8,8 +8,10 @@ export default [
     name: "stocks",
     component: Stocks,
     meta: {
+      auth: true,
       title: "Stocks",
-      layout: DefaultLayout
+      layout: DefaultLayout,
+      transition: "fade-in-left"
     }
   },
   {
@@ -18,12 +20,10 @@ export default [
     component: () =>
       import(/* webpackChunkName: "portfolio" */ "@/views/Portfolio"),
     meta: {
+      auth: true,
       title: "Portfolio",
-      layout: DefaultLayout
+      layout: DefaultLayout,
+      transition: "fade-in-right"
     }
-  },
-  {
-    path: "*",
-    redirect: "/"
   }
 ];

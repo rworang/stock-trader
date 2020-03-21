@@ -74,7 +74,6 @@ export default {
         error: errors => {
           this.$store.dispatch("setLoading", false);
           this.$store.commit("SET_ERRORS", errors.response.data);
-          console.log(errors.response.data);
         }
       });
     }
