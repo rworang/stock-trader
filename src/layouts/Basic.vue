@@ -1,8 +1,6 @@
 <template>
   <v-content>
-    <vue-page-transition>
-      <slot />
-    </vue-page-transition>
+    <slot />
   </v-content>
 </template>
 

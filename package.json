@@ -9,8 +9,6 @@
     "prod": "serve -s dist"
   },
   "dependencies": {
-    "@sentry/browser": "^5.14.2",
-    "@sentry/integrations": "^5.14.2",
     "@websanova/vue-auth": "^2.22.0-beta",
     "core-js": "^3.6.4",
     "register-service-worker": "^1.7.0",

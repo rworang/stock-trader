@@ -68,7 +68,7 @@ export default {
           this.$store.commit("SET_ERRORS", null);
           this.$store.dispatch("setLoading", false);
           this.$router.push({
-            name: "stocks"
+            path: "/"
           });
         },
         error: errors => {

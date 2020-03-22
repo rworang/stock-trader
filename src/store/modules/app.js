@@ -1,5 +1,6 @@
 export default {
   state: {
+    layoutLoading: false,
     rapport: false,
     mini: false,
     drawerItems: [
@@ -33,8 +34,12 @@ export default {
     ],
     tabs: [
       {
-        value: "stocks",
+        value: "overview",
         to: "/"
+      },
+      {
+        value: "stocks",
+        to: "/stocks"
       },
       {
         value: "portfolio",

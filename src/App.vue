@@ -1,9 +1,12 @@
 <template>
   <v-theme-provider root>
     <v-app>
-      <component :is="this.$route.meta.layout" v-if="loaded">
+      <vue-page-transition>
+        <component :is="this.$route.meta.layout" v-if="loaded">
           <router-view />
-      </component>
+        </component>
+      </vue-page-transition>
+
       <!--        <app-loader v-else />-->
     </v-app>
   </v-theme-provider>

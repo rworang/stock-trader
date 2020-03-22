@@ -15,7 +15,7 @@
       </v-tabs>
       <v-spacer></v-spacer>
       <v-btn-toggle v-model="toggle" dense>
-        <template v-if="$route.name !== 'portfolio'">
+        <template v-if="$route.name === 'stocks'">
           <v-menu offset-y dense>
             <template v-slot:activator="{ on }">
               <v-btn v-on="on" elevation="0">
