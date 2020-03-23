@@ -5,7 +5,9 @@
     <v-content>
       <v-container fluid class="py-0">
         <app-toolbar />
-        <slot />
+        <v-container>
+          <slot />
+        </v-container>
       </v-container>
     </v-content>
     <app-footer />
