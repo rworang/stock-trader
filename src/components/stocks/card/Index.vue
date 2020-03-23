@@ -21,7 +21,7 @@ export default {
   created() {
     setTimeout(() => {
       this.loading = false;
-    }, 5000);
+    }, 2500);
   },
   data: () => ({
     list: [],

@@ -7,26 +7,45 @@
     </v-row>
     <v-row style="min-height: 504px;">
       <v-col class="flex-grow-0 pr-0" style="min-width: 300px;">
-        <v-list color="transparent" class="py-0">
-          <v-list-item v-for="item in list" :key="item.id" link color="primary">
-            <v-list-item-content>
-              <v-list-item-title
-                v-text="findId(item.id).name"
-              ></v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-action-text
-              class="pr-2 text-left subtitle-1 currency"
-              v-text="' ' + item.price.toLocaleString()"
-            ></v-list-item-action-text>
-          </v-list-item>
-        </v-list>
+        <v-list-item-group v-model="selectedStock" color="transparent">
+          <v-list color="transparent" class="py-0">
+            <v-list-item
+              v-for="(item, i) in list"
+              :key="item.id"
+              link
+              color="primary"
+              :disabled="loading"
+              style="margin-left: -8px;"
+            >
+              <v-list-item-action-text
+                class="subtitle-1 pr-2 text-right"
+                style="width: 28px;"
+              >
+                {{ ++i + ". " }}
+              </v-list-item-action-text>
+              <v-list-item-content>
+                <v-list-item-title
+                  title="findId(item.id).name"
+                  v-text="findId(item.id).name"
+                ></v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-action-text
+                class="pr-2 text-left subtitle-1 currency"
+                v-text="' ' + item.price.toLocaleString()"
+              ></v-list-item-action-text>
+            </v-list-item>
+          </v-list>
+        </v-list-item-group>
       </v-col>
       <v-col class="pl-0" style="overflow: hidden;">
         <v-sheet
           width="100%"
           height="100%"
-          color="grey"
-          class="lighten-4 pa-6 pt-8 pb-12"
+          :class="
+            $vuetify.theme.isDark
+              ? 'pa-6 pt-8 pb-12'
+              : 'grey lighten-4 pa-6 pt-8 pb-12'
+          "
         >
           <div
             style="position: relative; width: 100%; height: 100%;"
@@ -34,73 +53,69 @@
           >
             <div>
               <v-sheet v-for="i in 10" :key="i" class="graph-ruler">
-                <v-hover v-slot="{ hover }">
-                  <!--                <v-hover>-->
-                  <div>
-                    <div>
-                      <v-sheet
-                        class="text-right flex pr-2 line-highlight"
-                        :class="hover ? 'grey' : 'border-bottom'"
-                        :style="
-                          'opacity:0.2;position: absolute; min-height: 10%; max-height: 10%; width: 100%; ' +
-                            'top: ' +
-                            (i - 1) * 10 +
-                            '%;'
-                        "
-                      ></v-sheet>
-                    </div>
+                <div>
+                  <v-sheet
+                    class="text-right flex pr-2 line-highlight border-top"
+                    :style="
+                      'background:transparent;opacity:0.25;position: absolute; min-height: 10%; max-height: 10%; width: 100%; ' +
+                        'top: ' +
+                        (i - 1) * 10 +
+                        '%;'
+                    "
+                  ></v-sheet>
+                  <div
+                    class="flex graph-ruler-marker text-right"
+                    :style="
+                      'position: absolute; min-height: 10%; max-height: 10%; width: 60px; ' +
+                        'top: ' +
+                        (i - 1) * 10 +
+                        '%;'
+                    "
+                  >
                     <div
-                      class="flex graph-ruler-marker text-right"
-                      :style="
-                        'position: absolute; min-height: 10%; max-height: 10%; width: 60px; ' +
-                          'top: ' +
-                          (i - 1) * 10 +
-                          '%;'
-                      "
+                      class="border-top ml-auto"
+                      style="max-width: 10px;"
+                    ></div>
+                    <div
+                      style="position: absolute; top: 50%; right: 8px; transform: translateY(-75%);"
                     >
-                      <div
-                        class="border-top ml-auto"
-                        style="max-width: 10px;"
-                      ></div>
-                      <div
-                        style="position: absolute; top: 50%; right: 8px; transform: translateY(-50%);"
-                      >
-                        {{
-                          !loadingStock
-                            ? (graphMax() / 10) * (10 - (i - 1))
-                            : ""
-                        }}
-                      </div>
+                      {{
+                        !loadingStock ? (graphMax() / 10) * (10 - (i - 1)) : ""
+                      }}
                     </div>
                   </div>
-                </v-hover>
+                </div>
               </v-sheet>
             </div>
             <div
-                    style="position: absolute; left: 60px; height: calc(100% + 48px); width: calc(100% - 60px);"
+              style="position: absolute; left: 60px; height: calc(100% + 48px); width: calc(100% - 60px);"
             >
               <v-container
-                      class="fill-height py-0"
-                      style="position: relative;"
-                      fluid
+                class="fill-height py-0"
+                style="position: relative;"
+                fluid
               >
                 <v-col
-                        v-for="item in list"
-                        :key="item.id"
-                        class="py-0 fill-height"
-                        style="position: relative;"
+                  v-for="item in list"
+                  :key="item.id"
+                  class="py-0 fill-height"
+                  style="position: relative;"
                 >
                   <v-row
-                          style="position:absolute;bottom:48px;width:100%;height:calc(100% - 48px);"
+                    style="position:absolute;bottom:48px;width:100%;height:calc(100% - 48px);"
                   >
-                    <div
-                            :style="
-                        'width: 40%;position: absolute;bottom: 0;left: 50%;transform: translateX(-50%);height: ' +
-                          (item.price / graphMax()) * 100 +
-                          '%;'
-                      "
-                            class="primary"
-                    ></div>
+                    <v-expand-transition>
+                      <div
+                        v-if="!loading"
+                        :style="
+                          'width: 40%;position: absolute;bottom: 0;left: 50%;transform: translateX(-50%);height: ' +
+                            (item.price / graphMax()) * 100 +
+                            '%;' +
+                            ($vuetify.theme.isDark ? '' : 'background: linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0))')
+                        "
+                        class="primary"
+                      ></div>
+                    </v-expand-transition>
                   </v-row>
                   <v-row style="position:absolute;bottom:0;width:100%;">
                     <v-col class="text-center">
@@ -128,7 +143,7 @@ export default {
   created() {
     setTimeout(() => {
       this.loading = false;
-    }, 5000);
+    }, 500);
   },
   methods: {
     graphMax() {
@@ -154,6 +169,7 @@ export default {
     // }
   },
   data: () => ({
+    selectedStock: null,
     hovering: false,
     list: [],
     listHigh: null,
