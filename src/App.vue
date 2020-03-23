@@ -1,6 +1,6 @@
 <template>
   <v-theme-provider root>
-    <v-app>
+    <v-app class="cursor-default">
       <vue-page-transition>
         <component :is="this.$route.meta.layout" v-if="loaded">
           <router-view />
@@ -67,6 +67,9 @@ export default {
 
 .pointer {
   cursor: pointer;
+}
+.cursor-default {
+  cursor: default;
 }
 
 .border-dark-y {

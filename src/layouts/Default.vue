@@ -3,11 +3,9 @@
     <app-left-drawer />
     <app-bar />
     <v-content>
-      <v-container fluid class="mb-12">
+      <v-container fluid class="py-0">
         <app-toolbar />
-        <vue-page-transition>
-          <slot />
-        </vue-page-transition>
+        <slot />
       </v-container>
     </v-content>
     <app-footer />

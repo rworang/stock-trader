@@ -16,9 +16,6 @@ Vue.config.productionTip = false;
 Vue.prototype.$appName = "Stock Trader";
 Vue.prototype.$axios = axios;
 
-import PageTransition from "./components/PageTransition";
-Vue.component("app-page-transition", PageTransition);
-
 new Vue({
   router,
   store,
